@@ -1,11 +1,11 @@
 {
-  "name": "BigDog Progressive Web App",
-  "short_name": "BigDog",
-  "description": "A Progressive Web App for BigDog",
+  "name": "Big Dog's Progressive Web App",
+  "short_name": "Big Dog",
+  "description": "Big Dog's Progressive Web App",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2196F3",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "orientation": "portrait-primary",
   "icons": [
     {

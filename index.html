@@ -2,115 +2,236 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BigDog - A Progressive Web App">
-    <meta name="theme-color" content="#2196F3">
-    <title>BigDog - PWA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Big Dog's App">
+    <meta name="description" content="Big Dog's Progressive Web App">
+    <meta name="theme-color" content="#000000">
+    <title>Big Dog's App</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png">
     <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
     <style>
+        /* Reset & Base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        /* iOS Safe Areas */
+        :root {
+            --sat: env(safe-area-inset-top);
+            --sab: env(safe-area-inset-bottom);
+            --sal: env(safe-area-inset-left);
+            --sar: env(safe-area-inset-right);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            -webkit-text-size-adjust: 100%;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            padding-top: var(--sat);
+            padding-bottom: var(--sab);
+            line-height: 1.5;
+            position: relative;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        }
+        
+        /* Dynamic Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(220, 38, 38, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(219, 39, 119, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(127, 29, 29, 0.1) 0%, transparent 40%);
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            33% {
+                opacity: 0.8;
+                transform: scale(1.1) rotate(5deg);
+            }
+            66% {
+                opacity: 0.9;
+                transform: scale(1.05) rotate(-5deg);
+            }
         }
         
         .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 448px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             text-align: center;
-            max-width: 500px;
-            width: 100%;
+        }
+        
+        .dog-logo {
+            margin-bottom: 2rem;
         }
         
         h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 2.5em;
+            font-size: 2.25rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.5rem;
         }
         
-        .emoji {
-            font-size: 5em;
-            margin-bottom: 20px;
-            display: block;
+        .title-accent {
+            color: #DC2626;
+        }
+        
+        .subtitle {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
         }
         
         p {
-            color: #666;
+            color: #9ca3af;
             line-height: 1.6;
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
         }
         
-        .status {
-            margin-top: 30px;
-            padding: 15px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            font-size: 0.9em;
-        }
-        
-        .status.online {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .status.offline {
-            background: #f8d7da;
-            color: #721c24;
+        .install-section {
+            margin: 2rem 0;
         }
         
         button {
-            background: #667eea;
+            background: #DC2626;
             color: white;
             border: none;
             padding: 12px 30px;
             border-radius: 25px;
             font-size: 1em;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
         }
         
         button:hover {
-            background: #764ba2;
+            background: #B91C1C;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            border: 1px solid rgba(127, 29, 29, 0.3);
+        }
+        
+        .status.online {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+        
+        .status.offline {
+            background: rgba(220, 38, 38, 0.1);
+            border-color: rgba(220, 38, 38, 0.3);
+            color: #dc2626;
         }
         
         .install-prompt {
             display: none;
-            margin-top: 20px;
+        }
+        
+        .install-prompt.show {
+            display: block;
+        }
+        
+        /* Big Dog SVG */
+        .dog-svg {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <span class="emoji">🐕</span>
-        <h1>BigDog</h1>
-        <p>Welcome to BigDog Progressive Web App!</p>
+        <div class="dog-logo">
+            <!-- Big Dog SVG -->
+            <svg width="120" height="140" viewBox="0 0 120 140" class="dog-svg">
+                <g>
+                    <ellipse cx="60" cy="90" rx="35" ry="45" fill="#DC2626"/>
+                    <circle cx="60" cy="50" r="30" fill="#DC2626"/>
+                    <ellipse cx="40" cy="35" rx="12" ry="20" fill="#B91C1C"/>
+                    <ellipse cx="80" cy="35" rx="12" ry="20" fill="#B91C1C"/>
+                    <circle cx="50" cy="50" r="4" fill="#fff"/>
+                    <circle cx="70" cy="50" r="4" fill="#fff"/>
+                    <ellipse cx="60" cy="60" rx="6" ry="4" fill="#000"/>
+                    <path d="M 45 25 L 50 15 L 55 25 L 60 10 L 65 25 L 70 15 L 75 25 Z" fill="#FFD700"/>
+                    <rect x="45" y="125" width="10" height="15" rx="5" fill="#DC2626"/>
+                    <rect x="65" y="125" width="10" height="15" rx="5" fill="#DC2626"/>
+                </g>
+            </svg>
+        </div>
+        
+        <h1>
+            BIG DOG'S <span class="title-accent">APP</span>
+        </h1>
+        <p class="subtitle">Progressive Web App</p>
+        <p>Welcome to Big Dog's Progressive Web App!</p>
         <p>This app works offline and can be installed on your device.</p>
         
-        <div class="install-prompt" id="installPrompt">
-            <button id="installButton">Install App</button>
+        <div class="install-section">
+            <div class="install-prompt" id="installPrompt">
+                <button id="installButton">Install App</button>
+            </div>
         </div>
         
         <div class="status" id="status">
             <strong>Status:</strong> <span id="statusText">Checking...</span>
         </div>
     </div>
-
     <script>
         // Register service worker
         if ('serviceWorker' in navigator) {
@@ -154,7 +275,7 @@
             // Store the event for later use
             deferredPrompt = e;
             // Show install button
-            installPrompt.style.display = 'block';
+            installPrompt.classList.add('show');
         });
 
         installButton.addEventListener('click', async () => {
@@ -171,7 +292,7 @@
                 } else {
                     installButton.textContent = 'Install Declined';
                     setTimeout(() => {
-                        installPrompt.style.display = 'none';
+                        installPrompt.classList.remove('show');
                     }, 2000);
                 }
                 
@@ -182,7 +303,7 @@
 
         window.addEventListener('appinstalled', () => {
             console.log('PWA installed successfully');
-            installPrompt.style.display = 'none';
+            installPrompt.classList.remove('show');
         });
     </script>
 </body>
