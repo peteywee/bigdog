@@ -164,10 +164,19 @@
                 // Wait for the user's response
                 const { outcome } = await deferredPrompt.userChoice;
                 console.log(`User response: ${outcome}`);
+                
+                // Provide user feedback
+                if (outcome === 'accepted') {
+                    installButton.textContent = 'Installing...';
+                } else {
+                    installButton.textContent = 'Install Declined';
+                    setTimeout(() => {
+                        installPrompt.style.display = 'none';
+                    }, 2000);
+                }
+                
                 // Clear the deferredPrompt
                 deferredPrompt = null;
-                // Hide install button
-                installPrompt.style.display = 'none';
             }
         });
 
