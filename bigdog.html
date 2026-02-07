@@ -579,7 +579,7 @@
             font-size: 0.75rem;
         }
         
-        .call-duration {
+        .call-duration-inline {
             display: inline-block;
             background: #10b981;
             height: 4px;
@@ -857,18 +857,6 @@
             pointer-events: none;
         }
         
-        /* Message bubbles for visual receipts */
-        .message-bubble {
-            max-width: 80%;
-            padding: 0.75rem 1rem;
-            border-radius: 1.125rem;
-            margin: 0.5rem 0;
-            font-size: 0.875rem;
-            line-height: 1.4;
-            position: relative;
-            word-wrap: break-word;
-        }
-        
         .message-from-him {
             background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
             margin-left: 0;
@@ -1073,7 +1061,7 @@
         /* Search */
         .search-btn {
             position: fixed;
-            bottom: 6rem;
+            bottom: calc(6rem + var(--sab));
             right: 1.5rem;
             width: 3.5rem;
             height: 3.5rem;
@@ -1105,9 +1093,6 @@
             }
         }
         
-        .search-btn {
-            bottom: calc(6rem + var(--sab));
-        }
         
         .search-modal {
             position: fixed;
@@ -1267,29 +1252,23 @@
             margin-bottom: 0.5rem;
             border-left: 3px solid transparent;
         }
-        
+
         .call-entry.outgoing {
             border-left-color: #16a34a;
         }
-        
+
         .call-entry.incoming {
             border-left-color: #2563eb;
         }
-        
+
         .call-entry.missed {
             border-left-color: #dc2626;
             background: rgba(220, 38, 38, 0.1);
         }
-        
-        .call-icon {
+
+        .call-entry .call-icon {
             width: 2.5rem;
             height: 2.5rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
         }
         
         .call-outgoing {
@@ -1467,7 +1446,7 @@
     </section>
 
     <!-- Timeline Section -->
-    <section id="timeline" class="px-6 py-12">
+    <section id="timeline" class="px-6 py-12" style="padding-bottom: 6rem;">
         <div class="container space-y-8">
             
             <!-- October: THE CHASE -->
@@ -1764,7 +1743,6 @@
                         <div>"Big Dog" used consistently—never forgot who runs this</div>
                         <div>Punctuation improved <strong>78%</strong> after you corrected me</div>
                         <div class="text-xs text-gray-400 italic mt-2">"Even when you're testing me, you're teaching me."</div>
-                        <div>Punctuation improved 78%</div>
                         <div class="font-bold">Learned when to back off</div>
                     </div>
                 </div>
@@ -2002,6 +1980,37 @@
             "crazy": [
                 { date: "Oct 26, 2025", text: "So is 39 year old you a lover or fighter as attractive as you are you must be crazy", type: "message" },
                 { date: "Dec 24, 2025", text: "Me: 'You're my girlfriend' / You: 'You are clinically crazy and who argues with someone like that'", type: "message" }
+            ],
+            "you ok?": [
+                { date: "Oct-Feb", text: "'You ok?' checked in 23 times \u2014 every time you were sick, hurting, or quiet too long", type: "stat" },
+                { date: "Jan 2026", text: "Follow-up rate: 100%. 'I wish I could do something' \u2014 meant it every time", type: "stat" }
+            ],
+            "call me": [
+                { date: "Oct-Feb", text: "'Can I call?' asked 31 times \u2014 never assumed I had access to you", type: "stat" },
+                { date: "Jan 9, 2026", text: "24 calls in one day. We'd hang up and within minutes one of us was calling back.", type: "call" }
+            ],
+            "join my facetime": [
+                { date: "Oct-Feb", text: "43 FaceTime invites from you. I showed up: 41/43 (95.3%)", type: "stat" },
+                { date: "Dec 2025", text: "2 missed: headphones dead both times. Avg join time: 2.3 minutes", type: "stat" },
+                { date: "Dec 5, 2025", text: "You gonna make me late lol (but I stayed on anyway)", type: "message" }
+            ],
+            "stand on business": [
+                { date: "Dec 2, 2025", text: "First time seeing you in person. Taco Bell, then the car. You weren't budging. 'I got to go.' That's when I knew you were different.", type: "message" },
+                { date: "Dec 8, 2025", text: "I miss you I can't wait to see if stand on business two times in a row", type: "message" },
+                { date: "Oct-Feb", text: "You stood your ground every time. Never compromised yourself. That's why I respect you.", type: "stat" }
+            ],
+            "i'm sorry": [
+                { date: "Jan 19, 2026", text: "I crossed the line finding your government name. You keep that off the internet for a reason. I learned quick: even when you love somebody, respect them.", type: "message" },
+                { date: "Jan 19, 2026", text: "Crisis resolved by 7:21 PM because you gave me grace. Again.", type: "message" }
+            ],
+            "headphones": [
+                { date: "Oct-Feb", text: "15 pairs of headphones casualties over 102 days", type: "stat" },
+                { date: "Dec 2025", text: "2 missed FaceTime invites \u2014 headphones dead both times. Only excuse that held up.", type: "stat" }
+            ],
+            "scared": [
+                { date: "Dec 6, 2025", text: "I'm in trouble I feel it already... a connection without sounding too deep introspective", type: "message" },
+                { date: "Jan 5, 2026", text: "I don't know how long it'll last I don't know how long I'll be able to hold your attention", type: "message" },
+                { date: "Jan 22, 2026", text: "Never doubt that I love you. So much that I understand if you have to leave me alone... it's going to destroy me, but I understand.", type: "message" }
             ]
         };
         
@@ -2050,24 +2059,31 @@
             if (query.length > 2) performSearch(query);
         });
         
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
         function performSearch(query) {
             const results = searchData[query] || [];
             const resultsContainer = document.getElementById('searchResults');
-            
+            const safeQuery = escapeHtml(query);
+
             if (results.length === 0) {
                 resultsContainer.innerHTML = `
                     <div class="text-center text-gray-500" style="padding: 3rem 0;">
-                        <p>No results found for "${query}"</p>
+                        <p>No results found for "${safeQuery}"</p>
                         <p class="text-xs mt-2">Try: beautiful, love, miss you, morning</p>
                     </div>
                 `;
                 return;
             }
-            
+
             let html = `
                 <div class="mb-4">
                     <div class="text-xs text-red-500 uppercase tracking-widest mb-2">
-                        Found ${results.length} ${results.length === 1 ? 'moment' : 'moments'} for "${query}"
+                        Found ${results.length} ${results.length === 1 ? 'moment' : 'moments'} for "${safeQuery}"
                     </div>
                     <div class="text-xs text-gray-400 mb-4">The receipts speak for themselves...</div>
                 </div>
@@ -2103,10 +2119,10 @@
                     `;
                 } else {
                     // Message bubble style (iMessage-inspired)
-                    const bubbleClass = isLongMessage ? 'max-w-full' : 'max-w-[85%]';
+                    const maxWidth = isLongMessage ? '100%' : '85%';
                     html += `
                         <div class="mb-3 flex justify-end" style="animation: slideInRight 0.4s ease-out ${index * 0.1}s backwards;">
-                            <div class="${bubbleClass}">
+                            <div style="max-width: ${maxWidth};">
                                 <div class="text-xs text-gray-500 mb-1 text-right">${result.date}</div>
                                 <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl rounded-tr-sm px-4 py-3 shadow-lg">
                                     <div class="text-sm text-white leading-relaxed">${result.text}</div>
