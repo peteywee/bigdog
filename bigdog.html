@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Big Dog's App">
+    <title>Big Dog's App</title>
+    
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+        
+        /* iOS Safe Areas */
+        :root {
+            --sat: env(safe-area-inset-top);
+            --sab: env(safe-area-inset-bottom);
+            --sal: env(safe-area-inset-left);
+            --sar: env(safe-area-inset-right);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            padding-top: var(--sat);
+            padding-bottom: var(--sab);
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        /* Dynamic Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(220, 38, 38, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(219, 39, 119, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(127, 29, 29, 0.1) 0%, transparent 40%);
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            33% {
+                opacity: 0.8;
+                transform: scale(1.1) rotate(5deg);
+            }
+            66% {
+                opacity: 0.9;
+                transform: scale(1.05) rotate(-5deg);
+            }
+        }
+        
+        /* Floating Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(220, 38, 38, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.2), transparent),
+                radial-gradient(1px 1px at 80% 10%, rgba(219, 39, 119, 0.3), transparent),
+                radial-gradient(2px 2px at 90% 60%, rgba(255, 255, 255, 0.25), transparent),
+                radial-gradient(1px 1px at 30% 80%, rgba(220, 38, 38, 0.3), transparent),
+                radial-gradient(1px 1px at 70% 40%, rgba(255, 255, 255, 0.2), transparent);
+            background-size: 200% 200%;
+            animation: particleFloat 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes particleFloat {
+            0%, 100% {
+                background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%, 10% 90%, 30% 10%, 70% 60%;
+            }
+            25% {
+                background-position: 100% 0%, 0% 100%, 60% 40%, 70% 30%, 20% 80%, 40% 20%, 80% 50%;
+            }
+            50% {
+                background-position: 100% 100%, 0% 0%, 40% 60%, 90% 10%, 30% 70%, 20% 30%, 60% 70%;
+            }
+            75% {
+                background-position: 0% 100%, 100% 0%, 50% 50%, 60% 40%, 40% 90%, 50% 10%, 90% 40%;
+            }
+        }
+        
+        /* Utility Classes */
+        .container {
+            max-width: 448px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .flex-col {
+            flex-direction: column;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .items-end {
+            align-items: flex-end;
+        }
+        
+        .justify-center {
+            justify-content: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .space-x-4 > * + * {
+            margin-left: 1rem;
+        }
+        
+        .space-y-2 > * + * {
+            margin-top: 0.5rem;
+        }
+        
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+        
+        .space-y-8 > * + * {
+            margin-top: 2rem;
+        }
+        
+        .gap-2 {
+            gap: 0.5rem;
+        }
+        
+        .gap-3 {
+            gap: 0.75rem;
+        }
+        
+        .gap-4 {
+            gap: 1rem;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .min-h-screen {
+            min-height: 100vh;
+        }
+        
+        .relative {
+            position: relative;
+        }
+        
+        .fixed {
+            position: fixed;
+        }
+        
+        .absolute {
+            position: absolute;
+        }
+        
+        .bottom-0 {
+            bottom: 0;
+        }
+        
+        .left-0 {
+            left: 0;
+        }
+        
+        .right-0 {
+            right: 0;
+        }
+        
+        .z-40 {
+            z-index: 40;
+        }
+        
+        .z-50 {
+            z-index: 50;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        /* Typography */
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+        
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+        
+        .text-base {
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+        
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+        
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+        
+        .font-bold {
+            font-weight: 700;
+        }
+        
+        .font-black {
+            font-weight: 900;
+        }
+        
+        .uppercase {
+            text-transform: uppercase;
+        }
+        
+        .tracking-tighter {
+            letter-spacing: -0.05em;
+        }
+        
+        .tracking-widest {
+            letter-spacing: 0.1em;
+        }
+        
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Colors */
+        .text-white {
+            color: #ffffff;
+        }
+        
+        .text-gray-300 {
+            color: #d1d5db;
+        }
+        
+        .text-gray-400 {
+            color: #9ca3af;
+        }
+        
+        .text-gray-500 {
+            color: #6b7280;
+        }
+        
+        .text-red-500 {
+            color: #ef4444;
+        }
+        
+        .text-red-600 {
+            color: #dc2626;
+        }
+        
+        .bg-black {
+            background-color: #000000;
+        }
+        
+        .bg-gray-900 {
+            background-color: #111827;
+        }
+        
+        .bg-gray-800 {
+            background-color: #1f2937;
+        }
+        
+        .bg-red-600 {
+            background-color: #dc2626;
+        }
+        
+        .bg-white {
+            background-color: #ffffff;
+        }
+        
+        .text-black {
+            color: #000000;
+        }
+        
+        /* Borders */
+        .border {
+            border-width: 1px;
+        }
+        
+        .border-t {
+            border-top-width: 1px;
+        }
+        
+        .border-gray-700 {
+            border-color: #374151;
+        }
+        
+        .border-gray-800 {
+            border-color: #1f2937;
+        }
+        
+        .border-red-900\/30 {
+            border-color: rgba(127, 29, 29, 0.3);
+        }
+        
+        /* Spacing */
+        .p-4 {
+            padding: 1rem;
+        }
+        
+        .p-6 {
+            padding: 1.5rem;
+        }
+        
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+        
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        .pb-8 {
+            padding-bottom: 2rem;
+        }
+        
+        .pt-4 {
+            padding-top: 1rem;
+        }
+        
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+        
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .mb-3 {
+            margin-bottom: 0.75rem;
+        }
+        
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+        
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+        
+        .mt-3 {
+            margin-top: 0.75rem;
+        }
+        
+        .mt-4 {
+            margin-top: 1rem;
+        }
+        
+        /* Sizing */
+        .w-6 {
+            width: 1.5rem;
+        }
+        
+        .h-6 {
+            height: 1.5rem;
+        }
+        
+        .w-10 {
+            width: 2.5rem;
+        }
+        
+        .h-10 {
+            height: 2.5rem;
+        }
+        
+        .w-12 {
+            width: 3rem;
+        }
+        
+        .h-12 {
+            height: 3rem;
+        }
+        
+        .w-14 {
+            width: 3.5rem;
+        }
+        
+        .h-14 {
+            height: 3.5rem;
+        }
+        
+        .min-w-0 {
+            min-width: 0;
+        }
+        
+        .flex-1 {
+            flex: 1 1 0%;
+        }
+        
+        /* Border Radius */
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        
+        .rounded-xl {
+            border-radius: 0.75rem;
+        }
+        
+        .rounded-2xl {
+            border-radius: 1rem;
+        }
+        
+        .rounded-full {
+            border-radius: 9999px;
+        }
+        
+        /* Shadows */
+        .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        /* Gradients */
+        .bg-gradient-to-br {
+            background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+        }
+        
+        .from-yellow-400 {
+            --tw-gradient-from: #facc15;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(250, 204, 21, 0));
+        }
+        
+        .to-orange-600 {
+            --tw-gradient-to: #ea580c;
+        }
+        
+        .from-pink-500 {
+            --tw-gradient-from: #ec4899;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(236, 72, 153, 0));
+        }
+        
+        .to-red-600 {
+            --tw-gradient-to: #dc2626;
+        }
+        
+        .from-red-600 {
+            --tw-gradient-from: #dc2626;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(220, 38, 38, 0));
+        }
+        
+        .to-pink-600 {
+            --tw-gradient-to: #db2777;
+        }
+        
+        .from-gray-900 {
+            --tw-gradient-from: #111827;
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(17, 24, 39, 0));
+        }
+        
+        /* Animations */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+        
+        /* Transitions */
+        .transition {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+        
+        /* Buttons */
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            outline: none;
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Hover Effects */
+        @media (hover: hover) {
+            .hover\:scale-105:hover {
+                transform: scale(1.05);
+            }
+            
+            .hover\:scale-110:hover {
+                transform: scale(1.1);
+            }
+            
+            .hover\:text-white:hover {
+                color: #ffffff;
+            }
+            
+            .hover\:border-red-600:hover {
+                border-color: #dc2626;
+            }
+        }
+        
+        /* Visual call/text components */
+        .call-log {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 3px solid #10b981;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin: 0.5rem 0;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 0.75rem;
+        }
+        
+        .call-duration {
+            display: inline-block;
+            background: #10b981;
+            height: 4px;
+            border-radius: 2px;
+            margin-left: 0.5rem;
+            transition: width 0.3s ease;
+        }
+        
+        .text-bubble {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 1rem;
+            border-bottom-right-radius: 0.25rem;
+            margin: 0.5rem 0;
+            max-width: 85%;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+        
+        .text-bubble-received {
+            background: rgba(55, 65, 81, 0.8);
+            border-bottom-right-radius: 1rem;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .text-timestamp {
+            font-size: 0.625rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.25rem;
+        }
+        
+        .call-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2px;
+            margin: 1rem 0;
+        }
+        
+        .call-cell {
+            aspect-ratio: 1;
+            background: rgba(55, 65, 81, 0.3);
+            border-radius: 2px;
+            transition: all 0.2s ease;
+        }
+        
+        .call-cell.active {
+            background: #10b981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+        
+        .call-cell.intense {
+            background: #dc2626;
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.6);
+        }
+        
+        .message-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin: 1rem 0;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 30% 70%, rgba(219, 39, 119, 0.15) 0%, transparent 40%);
+            animation: heroGlow 10s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+        
+        @keyframes heroGlow {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(10%, 10%) scale(1.1);
+                opacity: 0.5;
+            }
+        }
+        
+        .bottom-arrow {
+            position: absolute;
+            bottom: 3rem;
+        }
+        
+        .stats-container {
+            max-width: 28rem;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #111827 0%, #000000 100%);
+            border: 1px solid #1f2937;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(220, 38, 38, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(220, 38, 38, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: translate(-100%, -100%) rotate(45deg);
+            }
+            100% {
+                transform: translate(100%, 100%) rotate(45deg);
+            }
+        }
+        
+        /* Split-flap counter */
+        .flip-counter {
+            perspective: 1000px;
+            display: inline-block;
+        }
+        
+        .flip-card {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 48px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-radius: 6px;
+            margin: 0 2px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+        
+        .flip-card-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .flip-card.flipping .flip-card-inner {
+            animation: flip 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        @keyframes flip {
+            0% { transform: rotateX(0deg); }
+            50% { transform: rotateX(90deg); filter: blur(2px); }
+            100% { transform: rotateX(0deg); }
+        }
+        
+        .flip-card::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        
+        /* Timeline */
+        .timeline-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline-dot {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(220, 38, 38, 0.3);
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                    0 0 20px rgba(220, 38, 38, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                    0 0 30px rgba(220, 38, 38, 0.5);
+            }
+        }
+        
+        .timeline-line {
+            width: 2px;
+            flex: 1;
+            background-color: #1f2937;
+            margin: 0.5rem 0;
+        }
+        
+        /* Pattern cards */
+        .pattern-card {
+            background: linear-gradient(135deg, rgba(220,38,38,0.1) 0%, rgba(220,38,38,0.05) 100%);
+            border: 1px solid rgba(220,38,38,0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.1),
+                0 0 20px rgba(220, 38, 38, 0.1);
+        }
+        
+        .pattern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(220, 38, 38, 0.03) 10px,
+                    rgba(220, 38, 38, 0.03) 20px
+                );
+            pointer-events: none;
+        }
+        
+        /* Message bubbles for visual receipts */
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1.125rem;
+            margin: 0.5rem 0;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            position: relative;
+            word-wrap: break-word;
+        }
+        
+        .message-from-him {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            margin-left: 0;
+            margin-right: auto;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .message-from-her {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            margin-left: auto;
+            margin-right: 0;
+            border-bottom-right-radius: 0.25rem;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+        
+        .message-timestamp {
+            font-size: 0.6875rem;
+            color: #6b7280;
+            margin: 0.25rem 0;
+            text-align: center;
+        }
+        
+        /* Call log visualization */
+        .call-log-item {
+            background: rgba(22, 163, 74, 0.1);
+            border-left: 3px solid #16a34a;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .call-icon {
+            width: 2rem;
+            height: 2rem;
+            background: rgba(22, 163, 74, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .call-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .call-duration-bar {
+            height: 4px;
+            background: rgba(22, 163, 74, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+        
+        .call-duration-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
+            border-radius: 2px;
+            animation: fillBar 1.5s ease-out;
+        }
+        
+        @keyframes fillBar {
+            from { width: 0; }
+        }
+        
+        /* Frequency visualization */
+        .frequency-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.25rem;
+            height: 60px;
+            margin: 1rem 0;
+            padding: 0.5rem;
+            background: rgba(17, 24, 39, 0.4);
+            border-radius: 0.5rem;
+        }
+        
+        .frequency-bar {
+            flex: 1;
+            min-width: 0;
+            background: linear-gradient(180deg, rgba(220, 38, 38, 0.8) 0%, rgba(220, 38, 38, 0.3) 100%);
+            border-radius: 0.125rem 0.125rem 0 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .frequency-bar:hover {
+            background: linear-gradient(180deg, rgba(220, 38, 38, 1) 0%, rgba(220, 38, 38, 0.5) 100%);
+            transform: scaleY(1.1);
+        }
+        
+        /* Receipt container */
+        .receipt-box {
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .receipt-header {
+            font-size: 0.75rem;
+            color: #dc2626;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Music player */
+        .music-player {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(26, 26, 26, 0.95);
+            border-top: 1px solid rgba(220, 38, 38, 0.3);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            padding-bottom: calc(1rem + var(--sab));
+            z-index: 50;
+            box-shadow: 
+                0 -10px 30px rgba(0, 0, 0, 0.5),
+                0 -1px 0 rgba(220, 38, 38, 0.2);
+        }
+        
+        .music-player::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(220, 38, 38, 0.5) 50%,
+                transparent
+            );
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        .music-icon {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, #dc2626 0%, #db2777 100%);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(220, 38, 38, 0.3);
+            animation: iconGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes iconGlow {
+            0% {
+                box-shadow: 
+                    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                    0 0 20px rgba(220, 38, 38, 0.3);
+            }
+            100% {
+                box-shadow: 
+                    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+                    0 0 25px rgba(220, 38, 38, 0.5);
+            }
+        }
+        
+        .play-btn {
+            width: 3rem;
+            height: 3rem;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000000;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Search */
+        .search-btn {
+            position: fixed;
+            bottom: 6rem;
+            right: 1.5rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(220, 38, 38, 0.4);
+            z-index: 40;
+            animation: searchPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes searchPulse {
+            0%, 100% {
+                box-shadow: 
+                    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                    0 0 30px rgba(220, 38, 38, 0.4);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 
+                    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                    0 0 40px rgba(220, 38, 38, 0.6);
+                transform: scale(1.05);
+            }
+        }
+        
+        .search-btn {
+            bottom: calc(6rem + var(--sab));
+        }
+        
+        .search-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 50;
+        }
+        
+        .search-input {
+            flex: 1;
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            color: #ffffff;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-input::placeholder {
+            color: #6b7280;
+        }
+        
+        .search-input:focus {
+            border-color: #dc2626;
+        }
+        
+        .quick-search-btn {
+            padding: 0.5rem 1rem;
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            color: #d1d5db;
+        }
+        
+        .search-results-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 1rem;
+        }
+        
+        /* Hide scrollbar */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* GPU acceleration */
+        .gpu-accelerated {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        /* Prevent text size adjust */
+        input, textarea, button {
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        /* Leading relaxed */
+        .leading-relaxed {
+            line-height: 1.625;
+        }
+        
+        /* Special background for The Fall */
+        .fall-highlight {
+            background: 
+                linear-gradient(135deg, rgba(127, 29, 29, 0.3) 0%, rgba(127, 29, 29, 0.15) 100%);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            box-shadow: 
+                0 0 30px rgba(220, 38, 38, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fall-highlight::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+            animation: fallPulse 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes fallPulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Message bubbles for visual receipts */
+        .message-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            padding: 0.5rem;
+        }
+        
+        .message-bubble {
+            max-width: 75%;
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        
+        .message-him {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+        
+        .message-her {
+            align-self: flex-start;
+            background: #374151;
+            color: #e5e7eb;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .message-time {
+            font-size: 0.65rem;
+            color: #6b7280;
+            margin: 0.5rem 0;
+            text-align: center;
+        }
+        
+        /* Call log entries */
+        .call-entry {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid transparent;
+        }
+        
+        .call-entry.outgoing {
+            border-left-color: #16a34a;
+        }
+        
+        .call-entry.incoming {
+            border-left-color: #2563eb;
+        }
+        
+        .call-entry.missed {
+            border-left-color: #dc2626;
+            background: rgba(220, 38, 38, 0.1);
+        }
+        
+        .call-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .call-outgoing {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        }
+        
+        .call-incoming {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+        
+        .call-missed {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+        
+        .call-details {
+            flex: 1;
+        }
+        
+        .call-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f3f4f6;
+            margin-bottom: 0.125rem;
+        }
+        
+        .call-time {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+        
+        .call-duration {
+            font-size: 0.875rem;
+            color: #10b981;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .call-duration.missed {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="flex items-end justify-center mb-8 space-x-4">
+            <!-- Big Dog SVG -->
+            <svg width="120" height="140" viewBox="0 0 120 140" class="gpu-accelerated">
+                <g>
+                    <ellipse cx="60" cy="90" rx="35" ry="45" fill="#DC2626"/>
+                    <circle cx="60" cy="50" r="30" fill="#DC2626"/>
+                    <ellipse cx="40" cy="35" rx="12" ry="20" fill="#B91C1C"/>
+                    <ellipse cx="80" cy="35" rx="12" ry="20" fill="#B91C1C"/>
+                    <circle cx="50" cy="50" r="4" fill="#fff"/>
+                    <circle cx="70" cy="50" r="4" fill="#fff"/>
+                    <ellipse cx="60" cy="60" rx="6" ry="4" fill="#000"/>
+                    <path d="M 45 25 L 50 15 L 55 25 L 60 10 L 65 25 L 70 15 L 75 25 Z" fill="#FFD700"/>
+                    <rect x="45" y="125" width="10" height="15" rx="5" fill="#DC2626"/>
+                    <rect x="65" y="125" width="10" height="15" rx="5" fill="#DC2626"/>
+                </g>
+            </svg>
+            
+            <div class="text-gray-500 text-sm font-bold pb-8">vs</div>
+            
+            <!-- Little Dog SVG -->
+            <svg width="60" height="80" viewBox="0 0 60 80" class="gpu-accelerated">
+                <g>
+                    <ellipse cx="30" cy="50" rx="18" ry="22" fill="#4B5563"/>
+                    <circle cx="30" cy="28" r="15" fill="#4B5563"/>
+                    <ellipse cx="20" cy="20" rx="6" ry="10" fill="#374151"/>
+                    <ellipse cx="40" cy="20" rx="6" ry="10" fill="#374151"/>
+                    <circle cx="25" cy="28" r="2" fill="#fff"/>
+                    <circle cx="35" cy="28" r="2" fill="#fff"/>
+                    <ellipse cx="30" cy="34" rx="3" ry="2" fill="#000"/>
+                    <rect x="23" y="67" width="5" height="8" rx="2" fill="#4B5563"/>
+                    <rect x="32" y="67" width="5" height="8" rx="2" fill="#4B5563"/>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="text-center space-y-2">
+            <h1 class="text-4xl font-black tracking-tighter">
+                BIG DOG'S <span class="text-red-600">APP</span>
+            </h1>
+            <p class="text-xs text-gray-500 uppercase tracking-widest">Authorized Personnel Only</p>
+            <p class="text-sm text-gray-400 mt-4">Since October 25, 2025</p>
+        </div>
+        
+        <div class="bottom-arrow animate-bounce">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="px-6 py-12">
+        <div class="stats-container">
+            <div class="text-center mb-6">
+                <h2 class="text-xs text-gray-500 uppercase tracking-widest">Since October 25, 2025</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">Consecutive days</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">1</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">0</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">2</div></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">Total calls</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">8</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">4</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">7</div></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">Texts exchanged</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">3</div></div>
+                        <div class="flip-card text-gray-600"><div class="flip-card-inner">,</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">2</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">4</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">1</div></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">Good mornings</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">8</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">7</div></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">Good nights</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">8</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">2</div></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">FaceTime invites</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">4</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">3</div></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-400">Headphone casualties</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">1</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">5</div></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between border-t border-red-900\/30 pt-4">
+                    <span class="text-sm text-gray-400">Hierarchy established</span>
+                    <div class="flip-counter">
+                        <div class="flip-card"><div class="flip-card-inner">0</div></div>
+                        <div class="flip-card"><div class="flip-card-inner">1</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section id="timeline" class="px-6 py-12">
+        <div class="container space-y-8">
+            
+            <!-- October: THE CHASE -->
+            <div class="timeline-item">
+                <div class="text-xs text-red-500 uppercase tracking-widest mb-2">October 2025</div>
+                <div class="text-2xl font-black mb-1">THE CHASE</div>
+                <div class="text-sm text-gray-400 mb-6 leading-relaxed italic">"I knew I couldn't just let you drive off..."</div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot bg-gradient-to-br from-yellow-400 to-orange-600">👑</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Oct 25, 2025 • 10:47 PM</div>
+                        <h3 class="text-lg font-bold mb-2">When You Put Me In My Place</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">In the Uber. You said "I'm Big Dog." I laughed wrong. You checked me immediately: "I don't like the way you laughed." Right there, hierarchy established. You weren't playing. I respected it.</p>
+                        <div class="mt-3 text-xs text-red-500">🎵 "All the Things" - Joe</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #16a34a;">📞</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Oct 25, 2025 • 11:30 PM</div>
+                        <h3 class="text-lg font-bold mb-2">The Lie That Started Everything</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">"I think I left something in your car." That was the excuse. Truth? I just wanted a reason to call. Needed to hear that voice one more time. You knew what I was doing. You let me cook anyway.</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Oct 26, 2025 • 10:07 AM</div>
+                        <h3 class="text-lg font-bold mb-2">When I Warned You</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">You sent the automated "Thanks for the tip" message. I saw my shot and took it: "You're very welcome... I have to warn you I am the most interesting person in the world it gets kind of addictive I'm sorry 😏"<br><br>You had no idea what you were getting into.</p>
+                        
+                        <div class="receipt-box">
+                            <div class="receipt-header">📱 THE RECEIPTS</div>
+                            <div class="message-timestamp">Sunday, Oct 26 • 10:07 AM</div>
+                            <div class="message-bubble message-from-her">
+                                Thank you for the tip
+                            </div>
+                            <div class="message-bubble message-from-him">
+                                You're very welcome for the tip I have to warn you I am the most interesting person in the world it gets kind of addictive I'm sorry 😏
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- November -->
+            <div class="timeline-item">
+                <div class="text-xs text-red-500 uppercase tracking-widest mb-2">November 2025</div>
+                <div class="text-2xl font-black mb-1">THE BUILD</div>
+                <div class="text-sm text-gray-400 mb-6 leading-relaxed italic">"Late nights coding, but all I could think about was you..."</div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Nov 6, 2025</div>
+                        <h3 class="text-lg font-bold mb-2">Late Nights, Big Dreams, One Person On My Mind</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">Coding at 3AM, couldn't sleep anyway. Told you about the scheduling app, about buying a house one day. You said "Make sure it has something unique nobody can duplicate." I said: "It's got me." That's when I knew—I wasn't just building an app. I was building toward something real. And you were already part of the blueprint.</p>
+                        <div class="mt-3 text-xs text-red-500">🎵 Track 2: "Come and Talk to Me" - Jodeci</div>
+                    </div>
+                </div>
+                
+                <div class="pattern-card mb-8">
+                    <div class="text-xs text-red-500 uppercase tracking-widest mb-2">📊 The Morning Ritual</div>
+                    <div class="space-y-1 text-sm text-gray-300">
+                        <div><strong>87 "good morning beautiful"</strong> texts</div>
+                        <div>Every single day, 5-10am</div>
+                        <div>After coding all night, you were my first thought</div>
+                        <div class="text-xs text-gray-400 italic mt-2">"The best part of my night be telling you good morning"</div>
+                        <div>94% response rate</div>
+                        <div class="font-bold">Never missed once</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Nov 13, 2025</div>
+                        <h3 class="text-lg font-bold mb-2">The Dependency</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">Already catching feelings. Couldn't hide it anymore.</p>
+                        
+                        <div class="receipt-box">
+                            <div class="receipt-header">💬 THE ADMISSION</div>
+                            <div class="message-timestamp">Friday, Nov 13 • 2:09 PM</div>
+                            <div class="message-bubble message-from-him">
+                                I don't like not hearing from you 😭 lol hope you having a good day beautiful
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- December -->
+            <div class="timeline-item">
+                <div class="text-xs text-red-500 uppercase tracking-widest mb-2">December 2025</div>
+                <div class="text-2xl font-black mb-1">THE STAND-OFF</div>
+                <div class="text-sm text-gray-400 mb-6 leading-relaxed italic">"You stood your ground. I respected the hell out of it."</div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot bg-gradient-to-br from-yellow-400 to-orange-600">👑</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Dec 2, 2025</div>
+                        <h3 class="text-lg font-bold mb-2">The Night You Made Me Wait (And I Knew You Were Different)</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">First time seeing you in person. Taco Bell, then sitting in the car for an hour. I pulled out every move I had—jokes, looks, the works. You weren't budging. "I got to go, I got to go." When you drove off, I was mad as hell. But real talk? That's when I knew you weren't like the rest. You stood on business. And somehow that made me want you more.</p>
+                        <div class="mt-3 text-xs text-red-500">🎵 Track 4: "Nice & Slow" - Usher</div>
+                    </div>
+                </div>
+                
+                <div class="pattern-card mb-8">
+                    <div class="text-xs text-red-500 uppercase tracking-widest mb-2">📹 The Gatekeeper</div>
+                    <div class="space-y-1 text-sm text-gray-300">
+                        <div><strong>43 FaceTime invites</strong> from you</div>
+                        <div>I showed up: <strong>41/43 (95.3%)</strong></div>
+                        <div>2 missed: headphones dead both times</div>
+                        <div class="text-xs text-gray-400 italic mt-2">You send the invite. I drop everything and join. That's the system.</div>
+                        <div>Avg join time: 2.3 minutes</div>
+                        <div class="font-bold">You control visual access</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Dec 3, 2025</div>
+                        <h3 class="text-lg font-bold mb-2">What We Want</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">"We should discuss what we want before the sex fuddles everything..." Setting intentions before falling.</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Dec 24, 2025</div>
+                        <h3 class="text-lg font-bold mb-2">When I Made Up My Mind About You</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">Christmas Eve. I couldn't play it cool anymore.<br><br>Me: "I made it up in my mind that you're my girlfriend. That's just what that is."<br><br>You: "Well you are clinically crazy and who argues with someone like that, then you both look crazy!"<br><br>Translation: You didn't say no. You just called me crazy and kept me anyway. I'll take it.</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Dec 25, 2025</div>
+                        <h3 class="text-lg font-bold mb-2">The Text I Can't Stop Re-Reading</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">Drunk on tequila. Dead serious about every word.</p>
+                        
+                        <div class="receipt-box">
+                            <div class="receipt-header">💬 THE CONFESSION</div>
+                            <div class="message-timestamp">Wednesday, Dec 25 • 5:31 PM</div>
+                            <div class="message-bubble message-from-him">
+                                What makes you special to me, is that you see me. Patrick, flaws and all. And even then you think I'm an incredibly attractive strapping young man. I don't know where you get it from but you know whatever. You're special because the fact that I don't have anything to offer, except for a big dick, and confidence the size of Paul Bunyan, that you still not scared away of sharing an experience with me. I don't know how long it'll last I don't know how long I'll be able to hold your attention maybe I'll hit the lotto I don't know I don't think that you're after money I don't think that you're after anything I think that you like the attention that I give... anyway when I see you that ass is mine know that text me when you can
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- January -->
+            <div class="timeline-item">
+                <div class="text-xs text-red-500 uppercase tracking-widest mb-2">January 2026</div>
+                <div class="text-2xl font-black mb-1 bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">THE FALL</div>
+                <div class="text-sm text-gray-400 mb-6 leading-relaxed italic">"The day I stopped pretending I wasn't all the way in..."</div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot bg-gradient-to-br from-yellow-400 to-orange-600">👑</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Jan 5, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">The Morning I Finally Said It</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">First time I typed those three words to you. Didn't even hesitate. By then it was just facts.</p>
+                        
+                        <div class="receipt-box">
+                            <div class="receipt-header">💬 THE MESSAGE</div>
+                            <div class="message-timestamp">Monday, Jan 5 • 5:57 AM</div>
+                            <div class="message-bubble message-from-him">
+                                I miss you because you are my good thing, my muse, my inspiration to have more even if I don't want to dress like it. You are the reason and the motivation to get out of bed and the big reason I want to stay in it. Why you worry about others I don't know. But you're crazy so I just let you do what you do. <strong>I love you</strong> good morning beautiful 😘
+                            </div>
+                        </div>
+                        <div class="mt-3 text-xs text-red-500">🎵 Track 5: "All My Life" - K-Ci & JoJo</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #dc2626;">🔥</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Jan 9, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">The Day We Both Stopped Fighting It</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed fall-highlight mb-4"><strong>24 calls.</strong> One day. We'd hang up and within minutes one of us was calling back. "I miss you already." "Call me when you can." "Just wanted to hear your voice." We tried to play it cool at first. By call 10, we stopped pretending. By call 20, we both knew what this was. This was THE FALL. The point of no return. When I realized I was in trouble—the best kind.</p>
+                        
+                        <div class="receipt-box">
+                            <div class="receipt-header">📞 THE CALL LOG - JAN 9, 2026</div>
+                            
+                            <div class="call-log-item">
+                                <div class="call-icon">📞</div>
+                                <div class="call-info">
+                                    <div class="text-sm font-medium">Call #1 • 9:47 AM</div>
+                                    <div class="text-xs text-gray-400">Duration: 47 min</div>
+                                    <div class="call-duration-bar"><div class="call-duration-fill" style="width: 94%;"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="call-log-item">
+                                <div class="call-icon">📞</div>
+                                <div class="call-info">
+                                    <div class="text-sm font-medium">Call #2 • 10:41 AM</div>
+                                    <div class="text-xs text-gray-400">Duration: 12 min</div>
+                                    <div class="call-duration-bar"><div class="call-duration-fill" style="width: 24%;"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="call-log-item">
+                                <div class="call-icon">📞</div>
+                                <div class="call-info">
+                                    <div class="text-sm font-medium">Call #3 • 11:02 AM</div>
+                                    <div class="text-xs text-gray-400">Duration: 31 min</div>
+                                    <div class="call-duration-bar"><div class="call-duration-fill" style="width: 62%;"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-xs text-center text-gray-500 py-2">
+                                ... 21 more calls throughout the day ...
+                            </div>
+                            
+                            <div class="call-log-item">
+                                <div class="call-icon">📞</div>
+                                <div class="call-info">
+                                    <div class="text-sm font-medium">Call #24 • 11:47 PM</div>
+                                    <div class="text-xs text-gray-400">Duration: 1 hr 8 min</div>
+                                    <div class="call-duration-bar"><div class="call-duration-fill" style="width: 100%;"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div class="frequency-chart">
+                                <div class="frequency-bar" style="height: 20%;" title="8am"></div>
+                                <div class="frequency-bar" style="height: 65%;" title="9am"></div>
+                                <div class="frequency-bar" style="height: 90%;" title="10am"></div>
+                                <div class="frequency-bar" style="height: 85%;" title="11am"></div>
+                                <div class="frequency-bar" style="height: 55%;" title="12pm"></div>
+                                <div class="frequency-bar" style="height: 70%;" title="1pm"></div>
+                                <div class="frequency-bar" style="height: 80%;" title="2pm"></div>
+                                <div class="frequency-bar" style="height: 75%;" title="3pm"></div>
+                                <div class="frequency-bar" style="height: 60%;" title="4pm"></div>
+                                <div class="frequency-bar" style="height: 85%;" title="5pm"></div>
+                                <div class="frequency-bar" style="height: 90%;" title="6pm"></div>
+                                <div class="frequency-bar" style="height: 100%;" title="7pm"></div>
+                                <div class="frequency-bar" style="height: 95%;" title="8pm"></div>
+                                <div class="frequency-bar" style="height: 80%;" title="9pm"></div>
+                                <div class="frequency-bar" style="height: 90%;" title="10pm"></div>
+                                <div class="frequency-bar" style="height: 100%;" title="11pm"></div>
+                            </div>
+                            <div class="text-xs text-center text-gray-500">Hourly Call Intensity</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pattern-card mb-8">
+                    <div class="text-xs text-red-500 uppercase tracking-widest mb-2">🎯 The Respect Pattern</div>
+                    <div class="space-y-1 text-sm text-gray-300">
+                        <div>"Can I call?" asked <strong>31 times</strong></div>
+                        <div>Never assumed I had access to you</div>
+                        <div>"Big Dog" used consistently—never forgot who runs this</div>
+                        <div>Punctuation improved <strong>78%</strong> after you corrected me</div>
+                        <div class="text-xs text-gray-400 italic mt-2">"Even when you're testing me, you're teaching me."</div>
+                        <div>Punctuation improved 78%</div>
+                        <div class="font-bold">Learned when to back off</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Jan 11, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">When I Proved I Was Paying Attention</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">You asked me to tell you something I know about you. Not showing off, just proving I listen:<br><br>"Light or heavy? You used to eat Reese's all the time but burned yourself out. You want flowers but not roses. Your spending habits used to be better, but you shop away pain. You won Miss America two times in a row."<br><br>You: "Punctuation!"<br><br>Even when you're testing me, you're teaching me. I love that about you.</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Jan 11, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">The Fact Check</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">You: "I am the BIGGEST... the largest... the fattest"<br><br>Me immediately: "And most beautiful"</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot bg-gradient-to-br from-yellow-400 to-orange-600">👑</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Jan 12, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">The Reality Check</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">"Everything is not going to be perfect all the time. You can not just dwell in that moment overthinking... I was patronizing you."<br><br>You taught me maturity.</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mb-8">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #ea580c;">⚠️</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Jan 19, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">The Morning I Crossed The Line (And You Let Me Know It)</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">6:05 AM: "Jamee Antionette Hampton aka Jamee drew aka Rumpelstiltskin I got your ass 😘"<br><br>I thought I was being cute finding your government name. You keep that off the internet for a reason. You woke up and I could feel the temperature drop through the phone. I learned quick: there are boundaries. Even when you love somebody, respect them. Crisis resolved by 7:21 PM because you gave me grace. Again.</p>
+                    </div>
+                </div>
+                
+                <div class="pattern-card mb-8">
+                    <div class="text-xs text-red-500 uppercase tracking-widest mb-2">❤️‍🩹 The Care Log</div>
+                    <div class="space-y-1 text-sm text-gray-300">
+                        <div>"You ok?" checked in <strong>23 times</strong></div>
+                        <div>Every time you were sick, hurting, or quiet too long</div>
+                        <div>Follow-up rate: <strong>100%</strong></div>
+                        <div class="text-xs text-gray-400 italic mt-2">"I wish I could do something" meant it every time</div>
+                        <div class="font-bold">Consistent check-ins</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot" style="background-color: #2563eb;">💬</div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Jan 27, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">When I Chose You (Even When I Felt Like Dying)</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">Dizzy as hell, couldn't even stand straight. Taegen offered her couch to crash.<br><br>My text to you: "No thank you the way my gf understanding is set up"<br><br>I was sick. But I wasn't stupid. I knew where I belonged. Ubered straight to you and passed out in your bed. Some decisions are easy.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- February -->
+            <div class="timeline-item">
+                <div class="text-xs text-gray-500 uppercase tracking-widest mb-4">February 2026</div>
+                
+                <div class="flex gap-4">
+                    <div class="flex flex-col items-center">
+                        <div class="timeline-dot bg-gradient-to-br from-pink-500 to-red-600">🌹</div>
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <div class="text-xs text-gray-500 mb-1">Feb 14, 2026</div>
+                        <h3 class="text-lg font-bold mb-2">Today</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">Happy Valentine's Day, Big Dog.</p>
+                        <div class="mt-3 text-xs text-red-500">🎵 Track 7: "Can You Stand the Rain" - New Edition</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="container flex items-center gap-3">
+            <div class="music-icon">🎵</div>
+            <div class="flex-1 min-w-0">
+                <div class="text-sm font-bold truncate" id="trackName">All the Things</div>
+                <div class="text-xs text-gray-400 truncate" id="trackArtist">Joe - October: The Finesse</div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="prevBtn" class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white transition">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z"/>
+                    </svg>
+                </button>
+                <button id="playPauseBtn" class="play-btn hover:scale-105 transition">
+                    <svg id="playIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                    </svg>
+                    <svg id="pauseIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z"/>
+                    </svg>
+                </button>
+                <button id="nextBtn" class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-white transition">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Button -->
+    <button id="searchBtn" class="search-btn hover:scale-110 transition">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+    </button>
+
+    <!-- Search Modal -->
+    <div id="searchModal" class="search-modal hidden">
+        <div class="container" style="height: 100%; display: flex; flex-direction: column; padding-top: var(--sat); padding-bottom: var(--sab);">
+            <div class="p-4 flex items-center gap-3" style="border-bottom: 1px solid #1f2937;">
+                <button id="closeSearchBtn" class="w-10 h-10 flex items-center justify-center text-gray-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search the archive..." 
+                    class="search-input"
+                >
+            </div>
+            
+            <div class="p-4">
+                <div class="text-xs text-gray-500 uppercase tracking-widest mb-3">Quick Searches</div>
+                <div class="flex" style="flex-wrap: wrap; gap: 0.5rem;" id="quickSearches">
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">beautiful</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">love</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">miss you</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">call</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">facetime</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">big dog</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">you ok?</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">call me</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">Join my FaceTime</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">stand on business</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">I'm sorry</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">headphones</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">crazy</button>
+                    <button class="quick-search-btn transition hover:border-red-600 hover:text-white">scared</button>
+                </div>
+            </div>
+            
+            <div class="search-results-container hide-scrollbar" id="searchResults">
+                <div class="text-center text-gray-500" style="padding: 3rem 0;">
+                    <svg class="w-12 h-12 mx-auto mb-3" style="opacity: 0.5;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <p>Search or tap a quick search to get the receipts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const playlist = [
+            { name: "All the Things", artist: "Joe", context: "October: The Finesse" },
+            { name: "Come and Talk to Me", artist: "Jodeci", context: "November: The Build" },
+            { name: "You", artist: "Jesse Powell", context: "Late November: The Realization" },
+            { name: "Nice & Slow", artist: "Usher", context: "December 2: The Stand-Off" },
+            { name: "All My Life", artist: "K-Ci & JoJo", context: "Dec 24-Jan 9: The Fall" },
+            { name: "Freek'n You", artist: "Jodeci", context: "January: Established" },
+            { name: "Can You Stand the Rain", artist: "New Edition", context: "Present: The Foundation" }
+        ];
+        
+        let currentTrack = 0;
+        let isPlaying = false;
+        
+        const searchData = {
+            "beautiful": [
+                { date: "Oct 27, 2025", text: "Good morning beautiful 😍", type: "message" },
+                { date: "Nov 10, 2025", text: "Good morning beautiful 😍", type: "message" },
+                { date: "Dec 8, 2025", text: "GM chocolate 😘😚😘", type: "message" },
+                { date: "Jan 6, 2026", text: "Gm beautiful 🤩😍😘", type: "message" },
+                { date: "Every day", text: "87 'good morning beautiful' texts sent 5-10am after coding all night", type: "stat" }
+            ],
+            "morning": [
+                { date: "Every day", text: "87 'good morning beautiful' texts sent between Oct-Feb", type: "stat" },
+                { date: "Nov 6, 2025", text: "The best part of my night be telling you good morning 🌄", type: "message" }
+            ],
+            "love": [
+                { date: "Jan 5, 2026", text: "I miss you because you are my good thing, my muse, my inspiration to have more... I love you good morning beautiful 😘", type: "message" },
+                { date: "Jan 21, 2026", text: "I love you good night", type: "message" },
+                { date: "Jan 22, 2026", text: "Never doubt that I love you. So much that I understand if you have to leave me alone... it's going to destroy me, but I understand.", type: "message" }
+            ],
+            "miss you": [
+                { date: "Nov 13, 2025", text: "I don't like not hearing from you 😭 lol hope you having a good day beautiful", type: "message" },
+                { date: "Dec 6, 2025", text: "I'm in trouble I feel it already... a connection without sounding too deep introspective", type: "message" },
+                { date: "Dec 8, 2025", text: "I miss you I can't wait to see if stand on business two times in a row", type: "message" },
+                { date: "Jan 5, 2026", text: "I miss you because you are my good thing", type: "message" }
+            ],
+            "call": [
+                { date: "Jan 9, 2026", text: "24 FaceTime calls in one day - THE FALL", type: "call" },
+                { date: "Oct-Feb", text: "847 total calls over 102 days (8.3 calls/day average)", type: "stat" },
+                { date: "Jan 9, 2026", text: "Incoming FaceTime - 11:42 AM, Duration: 2h 14m", type: "call" },
+                { date: "Jan 9, 2026", text: "Outgoing FaceTime - 3:18 PM, Duration: 1h 47m", type: "call" }
+            ],
+            "facetime": [
+                { date: "Jan 9, 2026", text: "24 FaceTime calls - We literally couldn't hang up", type: "call" },
+                { date: "Oct-Feb", text: "43 FaceTime invites from you, I joined 41/43 (95.3%)", type: "stat" },
+                { date: "Dec 5, 2025", text: "You gonna make me late lol (but I stayed on anyway)", type: "message" }
+            ],
+            "big dog": [
+                { date: "Oct 25, 2025", text: "You claimed 'Big Dog.' I laughed. You checked me: 'I don't like the way you laughed.' Hierarchy established.", type: "message" },
+                { date: "Oct-Feb", text: "Used 'Big Dog' consistently - never forgot who runs this", type: "stat" }
+            ],
+            "crazy": [
+                { date: "Oct 26, 2025", text: "So is 39 year old you a lover or fighter as attractive as you are you must be crazy", type: "message" },
+                { date: "Dec 24, 2025", text: "Me: 'You're my girlfriend' / You: 'You are clinically crazy and who argues with someone like that'", type: "message" }
+            ]
+        };
+        
+        function updatePlayer() {
+            const track = playlist[currentTrack];
+            document.getElementById('trackName').textContent = track.name;
+            document.getElementById('trackArtist').textContent = `${track.artist} - ${track.context}`;
+        }
+        
+        document.getElementById('playPauseBtn').addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            document.getElementById('playIcon').classList.toggle('hidden', isPlaying);
+            document.getElementById('pauseIcon').classList.toggle('hidden', !isPlaying);
+            if ('vibrate' in navigator) navigator.vibrate(10);
+        });
+        
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+            updatePlayer();
+            if ('vibrate' in navigator) navigator.vibrate(10);
+        });
+        
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentTrack = (currentTrack + 1) % playlist.length;
+            updatePlayer();
+            if ('vibrate' in navigator) navigator.vibrate(10);
+        });
+        
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            document.getElementById('searchModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('searchInput').focus(), 100);
+        });
+        
+        document.getElementById('closeSearchBtn').addEventListener('click', () => {
+            document.getElementById('searchModal').classList.add('hidden');
+        });
+        
+        document.querySelectorAll('.quick-search-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                performSearch(btn.textContent.toLowerCase());
+            });
+        });
+        
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query.length > 2) performSearch(query);
+        });
+        
+        function performSearch(query) {
+            const results = searchData[query] || [];
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="text-center text-gray-500" style="padding: 3rem 0;">
+                        <p>No results found for "${query}"</p>
+                        <p class="text-xs mt-2">Try: beautiful, love, miss you, morning</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="mb-4">
+                    <div class="text-xs text-red-500 uppercase tracking-widest mb-2">
+                        Found ${results.length} ${results.length === 1 ? 'moment' : 'moments'} for "${query}"
+                    </div>
+                    <div class="text-xs text-gray-400 mb-4">The receipts speak for themselves...</div>
+                </div>
+            `;
+            
+            results.forEach((result, index) => {
+                // Use the type field for visual styling
+                const isCall = result.type === 'call';
+                const isStat = result.type === 'stat';
+                const isMessage = result.type === 'message';
+                const isLongMessage = result.text.length > 80;
+                
+                if (isCall) {
+                    // Call log style
+                    html += `
+                        <div class="mb-3 flex gap-3 items-start" style="animation: fadeIn 0.4s ease-out ${index * 0.1}s backwards;">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-600/20 flex items-center justify-center">
+                                <span class="text-green-500">📞</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs text-gray-500 mb-1">${result.date}</div>
+                                <div class="text-sm text-gray-300">${result.text}</div>
+                            </div>
+                        </div>
+                    `;
+                } else if (isStat) {
+                    // Stat card style
+                    html += `
+                        <div class="mb-3 bg-red-500/10 border border-red-500/30 rounded-lg p-4" style="animation: fadeIn 0.4s ease-out ${index * 0.1}s backwards;">
+                            <div class="text-xs text-red-500 uppercase tracking-widest mb-2">📊 Pattern Detected</div>
+                            <div class="text-sm text-gray-300">${result.text}</div>
+                        </div>
+                    `;
+                } else {
+                    // Message bubble style (iMessage-inspired)
+                    const bubbleClass = isLongMessage ? 'max-w-full' : 'max-w-[85%]';
+                    html += `
+                        <div class="mb-3 flex justify-end" style="animation: slideInRight 0.4s ease-out ${index * 0.1}s backwards;">
+                            <div class="${bubbleClass}">
+                                <div class="text-xs text-gray-500 mb-1 text-right">${result.date}</div>
+                                <div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl rounded-tr-sm px-4 py-3 shadow-lg">
+                                    <div class="text-sm text-white leading-relaxed">${result.text}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            resultsContainer.innerHTML = html;
+            if ('vibrate' in navigator) navigator.vibrate(15);
+        }
+        
+        // Add new animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { opacity: 0; transform: translateX(20px); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
+        
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.flip-card').forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('flipping');
+                            setTimeout(() => card.classList.remove('flipping'), 600);
+                        }, index * 50);
+                    });
+                    if ('vibrate' in navigator) navigator.vibrate([20, 10, 20]);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        const statsSection = document.getElementById('stats');
+        if (statsSection) statsObserver.observe(statsSection);
+        
+        updatePlayer();
+        
+        let startY = 0;
+        document.addEventListener('touchstart', e => {
+            startY = e.touches[0].pageY;
+        }, { passive: true });
+        
+        document.addEventListener('touchmove', e => {
+            const y = e.touches[0].pageY;
+            if (window.scrollY === 0 && y > startY) e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html>
