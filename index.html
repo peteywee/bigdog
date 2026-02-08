@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Big Dog" />
+
+  <title>Big Dog's App</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg-primary:#0a0a0a;
+      --bg-secondary:#141414;
+      --bg-card:#1a1a1a;
+      --text-primary:#f5f5f5;
+      --text-secondary:#a3a3a3;
+      --text-muted:#737373;
+      --accent-warm:#e07a5f;
+      --accent-gold:#d4a574;
+      --accent-rose:#c9ada7;
+      --border-subtle: rgba(255,255,255,0.06);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:'DM Sans',system-ui,sans-serif;
+      background:var(--bg-primary);
+      color:var(--text-primary);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    .app-container{max-width:480px;margin:0 auto}
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:2rem;
+      text-align:center;
+    }
+
+    .hero-title{
+      font-family:'Playfair Display',serif;
+      font-size:3rem;
+      background:linear-gradient(135deg,#fff,var(--accent-gold));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      margin-bottom:.5rem;
+    }
+
+    .hero-subtitle{
+      letter-spacing:.25em;
+      text-transform:uppercase;
+      font-size:.75rem;
+      color:var(--text-muted);
+      margin-bottom:1rem;
+    }
+
+    .hero-brand{
+      font-size:.95rem;
+      color:var(--text-secondary);
+      margin-bottom:1.75rem;
+    }
+
+    .hero-date{
+      display:inline-flex;
+      gap:.75rem;
+      align-items:center;
+      padding:.75rem 1.25rem;
+      border-radius:999px;
+      background:var(--bg-card);
+      border:1px solid var(--border-subtle);
+      margin-bottom:2rem;
+    }
+
+    .dot{
+      width:6px;height:6px;border-radius:50%;
+      background:var(--accent-warm);
+    }
+
+    .enter-btn{
+      padding:1rem 2rem;
+      border-radius:999px;
+      border:none;
+      font-weight:700;
+      background:linear-gradient(135deg,var(--accent-warm),#9a6b53);
+      color:#fff;
+      cursor:pointer;
+    }
+
+    .hero-footer{
+      margin-top:2rem;
+      font-size:.7rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+    }
+
+    .timeline-section{display:none;padding:1.5rem}
+    .timeline-section.active{display:block}
+
+    .timeline-item{
+      padding-left:2rem;
+      margin-bottom:2rem;
+      position:relative;
+    }
+
+    .timeline-item::before{
+      content:'';
+      position:absolute;
+      left:0;top:0;
+      width:12px;height:12px;
+      border-radius:50%;
+      background:var(--accent-warm);
+    }
+
+    .timeline-date{
+      font-size:.7rem;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+    }
+
+    .timeline-card{
+      margin-top:.5rem;
+      background:var(--bg-card);
+      padding:1rem;
+      border-radius:14px;
+      border:1px solid var(--border-subtle);
+    }
+
+    .card-title{
+      font-family:'Playfair Display',serif;
+      font-size:1.1rem;
+      margin-bottom:.25rem;
+    }
+
+    .card-content{
+      font-size:.9rem;
+      color:var(--text-secondary);
+    }
+
+    .card-quote{
+      margin-top:.5rem;
+      font-style:italic;
+      color:var(--accent-rose);
+      font-size:.85rem;
+    }
+
+    .music-player{
+      position:fixed;
+      bottom:0;left:50%;
+      transform:translateX(-50%);
+      width:100%;
+      max-width:480px;
+      padding:1rem;
+      background:linear-gradient(to top,#0a0a0a,#0a0a0af0);
+      display:none;
+    }
+
+    .music-player.active{display:block}
+
+    .player-content{
+      display:flex;
+      align-items:center;
+      gap:1rem;
+      background:var(--bg-card);
+      padding:.75rem 1rem;
+      border-radius:14px;
+      border:1px solid var(--border-subtle);
+    }
+
+    .player-btn{
+      width:40px;height:40px;
+      border-radius:50%;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+    }
+  </style>
+</head>
+
+<body>
+<div class="app-container">
+
+<section class="hero" id="hero">
+  <div>
+    <h1 class="hero-title">Big Dog's App</h1>
+    <p class="hero-subtitle">Authorized Personnel Only</p>
+    <p class="hero-brand">Brought to you with love by <strong>Top Shelf Service LLC™</strong></p>
+    <div class="hero-date">
+      <span class="dot"></span>
+      <span>Since October 25, 2025</span>
+    </div>
+    <button class="enter-btn" id="enterBtn">Our Story</button>
+    <div class="hero-footer">Top Shelf Service LLC™</div>
+  </div>
+</section>
+
+<section class="timeline-section" id="timelineSection">
+  <div id="timeline"></div>
+</section>
+
+<div class="music-player" id="musicPlayer">
+  <div class="player-content">
+    <div>🎵</div>
+    <div style="flex:1">
+      <div>You</div>
+      <div style="font-size:.8rem;color:var(--text-muted)">Jesse Powell</div>
+    </div>
+    <a class="player-btn" href="https://music.apple.com/us/album/you/1440870248?i=1440870533" target="_blank">▶</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+const timelineData = [
+ {date:"Oct 25, 2025",title:"The Uber Ride 🚗",content:"She claimed the title Big Dog."},
+ {date:"Dec 4, 2025",title:"The Soundtrack 🎵",content:"90s R&B slow jams. Jodeci. 112. Dru Hill. Jesse Powell."},
+ {date:"Feb 14, 2026",title:"Today 🌹",content:"Still standing. Still yours.",quote:"Happy Valentine's Day, Big Dog."}
+];
+
+const hero=document.getElementById('hero');
+const timelineSection=document.getElementById('timelineSection');
+const timeline=document.getElementById('timeline');
+const musicPlayer=document.getElementById('musicPlayer');
+
+document.getElementById('enterBtn').onclick=()=>{
+ hero.style.display='none';
+ timelineSection.classList.add('active');
+ musicPlayer.classList.add('active');
+ renderTimeline();
+};
+
+function renderTimeline(){
+ timeline.innerHTML='';
+ timelineData.forEach(item=>{
+  const el=document.createElement('div');
+  el.className='timeline-item';
+  el.innerHTML=`
+   <span class="timeline-date">${item.date}</span>
+   <div class="timeline-card">
+    <div class="card-title">${item.title}</div>
+    <div class="card-content">${item.content}</div>
+    ${item.quote?`<div class="card-quote">"${item.quote}"</div>`:''}
+   </div>`;
+  timeline.appendChild(el);
+ });
+}
+
+if('serviceWorker'in navigator){
+ navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
