@@ -955,8 +955,8 @@
 
       data.forEach((item, index) => {
         const article = document.createElement('article');
-        article.className = \`timeline-item \${item.type || ''}\`;
-        article.style.animationDelay = \`\${index * 0.05}s\`;
+        article.className = `timeline-item ${item.type || ''}`;
+        article.style.animationDelay = `${index * 0.05}s`;
 
         const quoteHtml = item.quote ? \`<div class="card-quote">"\${esc(item.quote)}"</div>\` : '';
 
