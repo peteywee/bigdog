@@ -1,271 +1,1263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0a0a0a" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Big Dog" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a1410">
+    <title>Big Dog's App</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terracotta: #c45c3e;
+            --terracotta-dark: #9e3f28;
+            --gold: #d4a574;
+            --gold-light: #e8c9a0;
+            --cream: #f5ebe0;
+            --dark: #1a1410;
+            --dark-warm: #2d221c;
+            --text-primary: #f5ebe0;
+            --text-secondary: #a89585;
+        }
 
-  <title>Big Dog's App</title>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-  <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+        html {
+            scroll-behavior: smooth;
+        }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@400;600;700;900&display=swap" rel="stylesheet" />
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--dark);
+            color: var(--text-primary);
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
 
-  <style>
-    :root{
-      --bg-primary:#0a0a0a;
-      --bg-secondary:#141414;
-      --bg-card:#1a1a1a;
-      --text-primary:#f5f5f5;
-      --text-secondary:#a3a3a3;
-      --text-muted:#737373;
-      --accent-warm:#e07a5f;
-      --accent-gold:#d4a574;
-      --accent-rose:#c9ada7;
-      --border-subtle: rgba(255,255,255,0.06);
-    }
+        /* Hero Section */
+        .hero {
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
 
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:'DM Sans',system-ui,sans-serif;
-      background:var(--bg-primary);
-      color:var(--text-primary);
-      min-height:100vh;
-      overflow-x:hidden;
-    }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(196, 92, 62, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(212, 165, 116, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
 
-    .app-container{max-width:480px;margin:0 auto}
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 400px;
+        }
 
-    .hero{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:2rem;
-      text-align:center;
-    }
+        /* Dog Illustration Container */
+        .dogs-container {
+            position: relative;
+            width: 280px;
+            height: 200px;
+            margin: 0 auto 2rem;
+        }
 
-    .hero-title{
-      font-family:'Playfair Display',serif;
-      font-size:3rem;
-      background:linear-gradient(135deg,#fff,var(--accent-gold));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      margin-bottom:.5rem;
-    }
+        .dog {
+            position: absolute;
+            transition: transform 0.3s ease;
+        }
 
-    .hero-subtitle{
-      letter-spacing:.25em;
-      text-transform:uppercase;
-      font-size:.75rem;
-      color:var(--text-muted);
-      margin-bottom:1rem;
-    }
+        .big-dog {
+            width: 160px;
+            height: 160px;
+            right: 20px;
+            bottom: 0;
+        }
 
-    .hero-brand{
-      font-size:.95rem;
-      color:var(--text-secondary);
-      margin-bottom:1.75rem;
-    }
+        .little-dog {
+            width: 100px;
+            height: 100px;
+            left: 30px;
+            bottom: 0;
+        }
 
-    .hero-date{
-      display:inline-flex;
-      gap:.75rem;
-      align-items:center;
-      padding:.75rem 1.25rem;
-      border-radius:999px;
-      background:var(--bg-card);
-      border:1px solid var(--border-subtle);
-      margin-bottom:2rem;
-    }
+        .dogs-container:hover .big-dog {
+            transform: translateY(-5px);
+        }
 
-    .dot{
-      width:6px;height:6px;border-radius:50%;
-      background:var(--accent-warm);
-    }
+        .dogs-container:hover .little-dog {
+            transform: translateY(-3px) rotate(-5deg);
+        }
 
-    .enter-btn{
-      padding:1rem 2rem;
-      border-radius:999px;
-      border:none;
-      font-weight:700;
-      background:linear-gradient(135deg,var(--accent-warm),#9a6b53);
-      color:#fff;
-      cursor:pointer;
-    }
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--terracotta) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    .hero-footer{
-      margin-top:2rem;
-      font-size:.7rem;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-    }
+        .hero-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
 
-    .timeline-section{display:none;padding:1.5rem}
-    .timeline-section.active{display:block}
+        .hero-tagline {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            opacity: 0.7;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
 
-    .timeline-item{
-      padding-left:2rem;
-      margin-bottom:2rem;
-      position:relative;
-    }
+        /* Flip Panel */
+        .flip-panel {
+            display: grid;
+            gap: 0.75rem;
+            background: var(--dark-warm);
+            border: 1px solid rgba(212, 165, 116, 0.2);
+            border-radius: 20px;
+            padding: 1rem 1.25rem;
+            margin: 0 auto 2rem;
+            max-width: 340px;
+        }
 
-    .timeline-item::before{
-      content:'';
-      position:absolute;
-      left:0;top:0;
-      width:12px;height:12px;
-      border-radius:50%;
-      background:var(--accent-warm);
-    }
+        .flip-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
 
-    .timeline-date{
-      font-size:.7rem;
-      letter-spacing:.15em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-    }
+        .flip-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
 
-    .timeline-card{
-      margin-top:.5rem;
-      background:var(--bg-card);
-      padding:1rem;
-      border-radius:14px;
-      border:1px solid var(--border-subtle);
-    }
+        .flip {
+            position: relative;
+            width: 150px;
+            height: 60px;
+            perspective: 900px;
+            flex-shrink: 0;
+        }
 
-    .card-title{
-      font-family:'Playfair Display',serif;
-      font-size:1.1rem;
-      margin-bottom:.25rem;
-    }
+        .flip.small { width: 120px; height: 52px; }
+        .flip.big { width: 170px; height: 68px; }
 
-    .card-content{
-      font-size:.9rem;
-      color:var(--text-secondary);
-    }
+        .flip-card {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.08);
+            overflow: hidden;
+            background: rgba(0,0,0,0.2);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+        }
 
-    .card-quote{
-      margin-top:.5rem;
-      font-style:italic;
-      color:var(--accent-rose);
-      font-size:.85rem;
-    }
+        .flip-divider {
+            position: absolute;
+            left: 10px; right: 10px;
+            top: 50%;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-0.5px);
+            z-index: 5;
+        }
 
-    .music-player{
-      position:fixed;
-      bottom:0;left:50%;
-      transform:translateX(-50%);
-      width:100%;
-      max-width:480px;
-      padding:1rem;
-      background:linear-gradient(to top,#0a0a0a,#0a0a0af0);
-      display:none;
-    }
+        .flip-static-top, .flip-static-bottom,
+        .flip-anim-top, .flip-anim-bottom {
+            position: absolute;
+            left: 0; right: 0;
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--gold-light);
+            letter-spacing: 0.02em;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.45);
+            user-select: none;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+        }
 
-    .music-player.active{display:block}
+        .flip.big .flip-static-top, .flip.big .flip-static-bottom,
+        .flip.big .flip-anim-top, .flip.big .flip-anim-bottom { font-size: 2.1rem; }
+        .flip.small .flip-static-top, .flip.small .flip-static-bottom,
+        .flip.small .flip-anim-top, .flip.small .flip-anim-bottom { font-size: 1.45rem; }
 
-    .player-content{
-      display:flex;
-      align-items:center;
-      gap:1rem;
-      background:var(--bg-card);
-      padding:.75rem 1rem;
-      border-radius:14px;
-      border:1px solid var(--border-subtle);
-    }
+        .flip-static-top {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.10));
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            transform: translateZ(1px);
+        }
 
-    .player-btn{
-      width:40px;height:40px;
-      border-radius:50%;
-      background:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-    }
-  </style>
+        .flip-static-bottom {
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(255,255,255,0.03));
+            transform: translateZ(1px);
+        }
+
+        .flip-anim-top {
+            top: 0;
+            transform-origin: bottom;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.10));
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: none;
+            transform: rotateX(0deg);
+            z-index: 10;
+        }
+
+        .flip-anim-bottom {
+            bottom: 0;
+            transform-origin: top;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(255,255,255,0.03));
+            display: none;
+            transform: rotateX(90deg);
+            z-index: 10;
+        }
+
+        @keyframes flipDownTop { from { transform: rotateX(0deg); } to { transform: rotateX(-90deg); } }
+        @keyframes flipUpBottom { from { transform: rotateX(90deg); } to { transform: rotateX(0deg); } }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            opacity: 0.6;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        .scroll-arrow {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            padding: 4rem 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--terracotta) 0%, var(--gold) 50%, var(--terracotta) 100%);
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            padding-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item.hidden {
+            display: none;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--dark-warm);
+            border: 2px solid var(--terracotta);
+            z-index: 1;
+        }
+
+        .timeline-item[data-type="milestone"] .timeline-dot {
+            background: var(--gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
+        }
+
+        .timeline-item[data-type="song"] .timeline-dot {
+            background: var(--terracotta);
+            border-color: var(--terracotta);
+        }
+
+        .timeline-item[data-type="stat"] .timeline-dot {
+            background: #e74c3c;
+            border-color: #e74c3c;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(231, 76, 60, 0); }
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .timeline-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline-content {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding-left: 0.75rem;
+            border-left: 2px solid rgba(212, 165, 116, 0.2);
+        }
+
+        .timeline-quote {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        /* Song Card */
+        .song-card {
+            margin-top: 0.75rem;
+            background: linear-gradient(135deg, rgba(196, 92, 62, 0.15) 0%, rgba(45, 34, 28, 0.8) 100%);
+            border: 1px solid rgba(196, 92, 62, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .song-card:hover {
+            transform: translateX(4px);
+            border-color: var(--terracotta);
+        }
+
+        .song-card:active {
+            transform: scale(0.98);
+        }
+
+        .song-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--terracotta);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .song-icon svg {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .song-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .song-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-artist {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .play-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .play-btn svg {
+            width: 14px;
+            height: 14px;
+            color: var(--dark);
+            margin-left: 2px;
+        }
+
+        /* Stats Highlight */
+        .stat-highlight {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(45, 34, 28, 0.8) 100%);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #e74c3c;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, transparent 0%, rgba(196, 92, 62, 0.05) 100%);
+        }
+
+        .footer-heart {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+            60% { transform: scale(1); }
+        }
+
+        .footer-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+        }
+
+        /* Utilities */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
 </head>
-
 <body>
-<div class="app-container">
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <!-- Big Dog & Little Dog Illustration -->
+            <div class="dogs-container">
+                <!-- Big Dog SVG -->
+                <svg class="dog big-dog" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Body -->
+                    <ellipse cx="100" cy="140" rx="60" ry="45" fill="#c45c3e"/>
+                    <!-- Head -->
+                    <circle cx="100" cy="70" r="45" fill="#d4a574"/>
+                    <!-- Ears -->
+                    <ellipse cx="60" cy="40" rx="18" ry="25" fill="#c45c3e" transform="rotate(-15 60 40)"/>
+                    <ellipse cx="140" cy="40" rx="18" ry="25" fill="#c45c3e" transform="rotate(15 140 40)"/>
+                    <!-- Inner ears -->
+                    <ellipse cx="62" cy="42" rx="10" ry="15" fill="#9e3f28" transform="rotate(-15 62 42)"/>
+                    <ellipse cx="138" cy="42" rx="10" ry="15" fill="#9e3f28" transform="rotate(15 138 42)"/>
+                    <!-- Face -->
+                    <ellipse cx="100" cy="85" rx="20" ry="15" fill="#9e3f28"/>
+                    <!-- Eyes -->
+                    <circle cx="80" cy="65" r="8" fill="#1a1410"/>
+                    <circle cx="120" cy="65" r="8" fill="#1a1410"/>
+                    <circle cx="82" cy="63" r="3" fill="white"/>
+                    <circle cx="122" cy="63" r="3" fill="white"/>
+                    <!-- Nose -->
+                    <ellipse cx="100" cy="80" rx="8" ry="6" fill="#1a1410"/>
+                    <!-- Mouth -->
+                    <path d="M92 90 Q100 98 108 90" stroke="#1a1410" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <!-- Crown -->
+                    <path d="M70 25 L80 10 L90 22 L100 5 L110 22 L120 10 L130 25 L125 30 L75 30 Z" fill="#d4a574" stroke="#c45c3e" stroke-width="2"/>
+                    <circle cx="100" cy="18" r="4" fill="#e74c3c"/>
+                    <!-- Tail -->
+                    <path d="M155 130 Q180 110 175 140 Q170 160 160 145" fill="#c45c3e" stroke="#9e3f28" stroke-width="2"/>
+                    <!-- Legs -->
+                    <rect x="60" y="170" width="20" height="25" rx="8" fill="#d4a574"/>
+                    <rect x="120" y="170" width="20" height="25" rx="8" fill="#d4a574"/>
+                </svg>
 
-<section class="hero" id="hero">
-  <div>
-    <h1 class="hero-title">Big Dog's App</h1>
-    <p class="hero-subtitle">Authorized Personnel Only</p>
-    <p class="hero-brand">Brought to you with love by <strong>Top Shelf Service LLC™</strong></p>
-    <div class="hero-date">
-      <span class="dot"></span>
-      <span>Since October 25, 2025</span>
-    </div>
-    <button class="enter-btn" id="enterBtn">Our Story</button>
-    <div class="hero-footer">Top Shelf Service LLC™</div>
-  </div>
-</section>
+                <!-- Little Dog SVG -->
+                <svg class="dog little-dog" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Body -->
+                    <ellipse cx="75" cy="105" rx="35" ry="28" fill="#2d221c"/>
+                    <!-- Head -->
+                    <circle cx="75" cy="55" r="30" fill="#3d3027"/>
+                    <!-- Ears -->
+                    <ellipse cx="50" cy="35" rx="12" ry="18" fill="#2d221c" transform="rotate(-20 50 35)"/>
+                    <ellipse cx="100" cy="35" rx="12" ry="18" fill="#2d221c" transform="rotate(20 100 35)"/>
+                    <!-- Face patch -->
+                    <ellipse cx="75" cy="65" rx="15" ry="12" fill="#4a3f35"/>
+                    <!-- Eyes -->
+                    <circle cx="62" cy="50" r="6" fill="#1a1410"/>
+                    <circle cx="88" cy="50" r="6" fill="#1a1410"/>
+                    <circle cx="63" cy="49" r="2" fill="white"/>
+                    <circle cx="89" cy="49" r="2" fill="white"/>
+                    <!-- Nose -->
+                    <ellipse cx="75" cy="62" rx="5" ry="4" fill="#1a1410"/>
+                    <!-- Smile -->
+                    <path d="M68 70 Q75 76 82 70" stroke="#1a1410" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    <!-- Heart on chest -->
+                    <path d="M75 95 C70 90 62 92 62 98 C62 104 75 112 75 112 C75 112 88 104 88 98 C88 92 80 90 75 95" fill="#c45c3e"/>
+                    <!-- Tail -->
+                    <path d="M105 100 Q120 85 118 105 Q116 115 108 108" fill="#2d221c"/>
+                    <!-- Legs -->
+                    <rect x="55" y="125" width="12" height="18" rx="5" fill="#3d3027"/>
+                    <rect x="83" y="125" width="12" height="18" rx="5" fill="#3d3027"/>
+                </svg>
+            </div>
 
-<section class="timeline-section" id="timelineSection">
-  <div id="timeline"></div>
-</section>
+            <h1 class="hero-title">Big Dog's App</h1>
+            <p class="hero-subtitle">A Love Story in Receipts</p>
+            <p class="hero-tagline">Authorized Personnel Only</p>
 
-<div class="music-player" id="musicPlayer">
-  <div class="player-content">
-    <div>🎵</div>
-    <div style="flex:1">
-      <div>You</div>
-      <div style="font-size:.8rem;color:var(--text-muted)">Jesse Powell</div>
-    </div>
-    <a class="player-btn" href="https://music.apple.com/us/album/you/1440870248?i=1440870533" target="_blank">▶</a>
-  </div>
-</div>
+            <div class="flip-panel" id="flipPanel">
+                <div class="flip-row">
+                    <div class="flip-label">Days</div>
+                    <div class="flip big" data-flip-id="days"></div>
+                </div>
+                <div class="flip-row">
+                    <div class="flip-label">Calls</div>
+                    <div class="flip small" data-flip-id="calls"></div>
+                </div>
+                <div class="flip-row">
+                    <div class="flip-label">Texts</div>
+                    <div class="flip small" data-flip-id="texts"></div>
+                </div>
+                <div class="flip-row">
+                    <div class="flip-label">Good Mornings</div>
+                    <div class="flip small" data-flip-id="gms"></div>
+                </div>
+            </div>
+        </div>
 
-</div>
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <svg class="scroll-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
 
-<script>
-const timelineData = [
- {date:"Oct 25, 2025",title:"The Uber Ride 🚗",content:"She claimed the title Big Dog."},
- {date:"Dec 4, 2025",title:"The Soundtrack 🎵",content:"90s R&B slow jams. Jodeci. 112. Dru Hill. Jesse Powell."},
- {date:"Feb 14, 2026",title:"Today 🌹",content:"Still standing. Still yours.",quote:"Happy Valentine's Day, Big Dog."}
-];
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+        <div class="section-header">
+            <h2 class="section-title">Our Story</h2>
+            <p class="section-subtitle">October 25, 2025 → Present</p>
+        </div>
 
-const hero=document.getElementById('hero');
-const timelineSection=document.getElementById('timelineSection');
-const timeline=document.getElementById('timeline');
-const musicPlayer=document.getElementById('musicPlayer');
+        <div class="timeline" id="timeline">
+            <!-- Timeline items will be injected by JavaScript -->
+        </div>
+    </section>
 
-document.getElementById('enterBtn').onclick=()=>{
- hero.style.display='none';
- timelineSection.classList.add('active');
- musicPlayer.classList.add('active');
- renderTimeline();
-};
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-heart">❤️</div>
+        <p class="footer-text">"I have to warn you I am the most interesting person in the world"</p>
+        <p class="footer-date">— Little Dog, October 26, 2025</p>
+    </footer>
 
-function renderTimeline(){
- timeline.innerHTML='';
- timelineData.forEach(item=>{
-  const el=document.createElement('div');
-  el.className='timeline-item';
-  el.innerHTML=`
-   <span class="timeline-date">${item.date}</span>
-   <div class="timeline-card">
-    <div class="card-title">${item.title}</div>
-    <div class="card-content">${item.content}</div>
-    ${item.quote?`<div class="card-quote">"${item.quote}"</div>`:''}
-   </div>`;
-  timeline.appendChild(el);
- });
-}
+    <script>
+        // Timeline Data - The Complete Story
+        const timelineData = [
+            {
+                date: "October 25, 2025",
+                title: "The Ride & The Title 👑",
+                type: "milestone",
+                content: `UberX ride. You claimed the title "Big Dog." I laughed. You said: <span class="timeline-quote">"I don't like the way you laughed."</span> I apologized immediately. The hierarchy was established right there.`,
+                searchTerms: "uber ride title big dog hierarchy first"
+            },
+            {
+                date: "October 25, 2025",
+                title: "The Finesse 📞",
+                type: "text",
+                content: `I called saying I "left something" in the car. (I didn't). I just needed to hear that voice again.`,
+                searchTerms: "finesse call left something car"
+            },
+            {
+                date: "October 26, 2025",
+                title: "The First Text 💬",
+                type: "milestone",
+                content: `You sent "Thanks for the tip." I saw my opening: <span class="timeline-quote">"You're very welcome for the tip. I have to warn you I am the most interesting person in the world... it gets kind of addictive. I'm sorry."</span>`,
+                searchTerms: "first text tip interesting person addictive"
+            },
+            {
+                date: "October 26, 2025",
+                title: "The Crazy Meter 🧐",
+                type: "text",
+                content: `<span class="timeline-quote">"As attractive as you are you must be crazy or something, it would only make sense."</span> You answered: "Yep, Crazy! How'd you guess?"`,
+                searchTerms: "crazy attractive caliber"
+            },
+            {
+                date: "October 28, 2025",
+                title: "On My Mind 💭",
+                type: "text",
+                content: `<span class="timeline-quote">"Well you might have crossed my mind a couple times. I figured I would say something."</span>`,
+                searchTerms: "crossed my mind"
+            },
+            {
+                date: "October 30, 2025",
+                title: "Questions Era 🤔",
+                type: "text",
+                content: "Have we gotten to the point we can start asking questions about each other or that like take a couple more days? Got to take it slow with the older generation, I ain't trying to mess up.",
+                searchTerms: "questions slow older generation"
+            },
+            {
+                date: "November 6, 2025",
+                title: "The Vision 🏗️",
+                type: "milestone",
+                content: `Told you about my scheduling app. You said: <span class="timeline-quote">"Make sure your system has something unique that nobody else can duplicate."</span> I said: "It's got me."`,
+                searchTerms: "app scheduling vision coding nerd"
+            },
+            {
+                date: "November 6, 2025",
+                title: "The Reveal 🤓",
+                type: "text",
+                content: `<span class="timeline-quote">"You got yourself a real nerd."</span>`,
+                searchTerms: "nerd reveal"
+            },
+            {
+                date: "November 10, 2025",
+                title: "The Foundation 💎",
+                type: "text",
+                content: "Asked what's most important in a relationship. You said Trust. I said Communication. We agreed: both.",
+                searchTerms: "trust communication relationship foundation important"
+            },
+            {
+                date: "November 15, 2025",
+                title: "First Commercial 🎬",
+                type: "milestone",
+                content: "Sent you my first commercial for the app. Showing you my work, my dreams.",
+                searchTerms: "commercial app video"
+            },
+            {
+                date: "November 16, 2025",
+                title: "The Confession 📊",
+                type: "text",
+                content: `<span class="timeline-quote">"I wanna say thank you for even entertaining my foolishness. I'm the shyest person on earth and you are like 2.58 levels out of my league but I still wake up with hope."</span>`,
+                searchTerms: "shy league 2.58 hope thank you"
+            },
+            {
+                date: "November 30, 2025",
+                title: "The Distance Check 📍",
+                type: "text",
+                content: `You asked where I live. About 25 minutes apart. <span class="timeline-quote">"Oh shit I could take you to dinner and be home before the drinks kick in."</span>`,
+                searchTerms: "distance where live 25 minutes dinner"
+            },
+            {
+                date: "December 1, 2025",
+                title: "First FaceTime 📱",
+                type: "milestone",
+                content: `The first video call. Finally seeing each other face to face. <span class="timeline-quote">"Why you not answering 😭"</span>... then we talked.`,
+                searchTerms: "facetime video call first"
+            },
+            {
+                date: "December 2, 2025",
+                title: "The First Date & The Stand-Off 🌮",
+                type: "milestone",
+                content: `Taco Bell run to see my sister. Sat outside for almost an hour. I tried every trick in the book. You said: <span class="timeline-quote">"We are going to keep our hands, feet and body parts off each other."</span> You stood on business. Respect earned forever.`,
+                searchTerms: "first date taco bell stand off business hands feet"
+            },
+            {
+                date: "December 3, 2025",
+                title: "The DTR Talk 💬",
+                type: "text",
+                content: `<span class="timeline-quote">"I've been thinking... that we should have a discussion about what we want before it gets fuddled because the sex is something mind blowing. I want somebody that's mine."</span>`,
+                searchTerms: "discussion relationship dtr what we want"
+            },
+            {
+                date: "December 4, 2025",
+                title: "The Playlist Begins 🎵",
+                type: "song",
+                content: "Started sending you songs that say what I can't always put into words.",
+                songs: [
+                    { title: "21 Questions (AI Cover)", artist: "50 Cent", url: "https://youtu.be/v81xlIMSF-I" },
+                    { title: "What Kind Of Man Would I Be", artist: "Mint Condition", url: "https://music.youtube.com/watch?v=iusZaKS-4CI" },
+                    { title: "Close To You", artist: "Dreezy ft. T-Pain", url: "https://music.youtube.com/watch?v=8q4GmcfNbcg" }
+                ],
+                searchTerms: "songs music playlist 21 questions mint condition close to you"
+            },
+            {
+                date: "December 5, 2025",
+                title: "Missing You Already 💔",
+                type: "text",
+                content: `<span class="timeline-quote">"Is it sad I miss you already?"</span>`,
+                searchTerms: "miss you already sad"
+            },
+            {
+                date: "December 6, 2025",
+                title: "The Energy Check ⚡",
+                type: "text",
+                content: `<span class="timeline-quote">"Am I crazy or do you feel this energy shit too? Like not clinically crazy but you know in the metaphorical sense."</span> I know I'm in trouble. I feel it already. A connection I haven't had in a while.`,
+                searchTerms: "energy crazy connection feel"
+            },
+            {
+                date: "December 8, 2025",
+                title: "Still No Regrets 🔥",
+                type: "text",
+                content: `<span class="timeline-quote">"I don't understand how I didn't get pussy and still excited about second date."</span> That's when I knew this was different.`,
+                searchTerms: "second date excited"
+            },
+            {
+                date: "December 10, 2025",
+                title: "Locked In 🔐",
+                type: "text",
+                content: `<span class="timeline-quote">"Been thinking about you all night. I feel like a lil puppy just following whatever you got going. I don't mind. My time is worth it. Them kisses locked me in. I couldn't go anywhere if I wanted to."</span>`,
+                searchTerms: "locked in kisses puppy following"
+            },
+            {
+                date: "December 11, 2025",
+                title: "Baby & Dream Girl 💕",
+                type: "milestone",
+                content: `First time calling you "baby." You noticed: <span class="timeline-quote">"Baby? That's different."</span> I said: "My dream girl. I just woke up, you still texting me back, so call it like I see it."`,
+                searchTerms: "baby dream girl first time"
+            },
+            {
+                date: "December 18, 2025",
+                title: "I Want You Around 🎵",
+                type: "song",
+                content: "This song says it all.",
+                songs: [
+                    { title: "I Want You Around (Remix)", artist: "Snoh Aalegra ft. 6LACK", url: "https://music.youtube.com/watch?v=MTQIcD3VSJY" }
+                ],
+                searchTerms: "i want you around snoh aalegra 6lack"
+            },
+            {
+                date: "December 23, 2025",
+                title: "Hard To Get 😏",
+                type: "text",
+                content: `<span class="timeline-quote">"If I ain't going nowhere, it is already been established I can do whatever the fuck I want but there are definitely consequences... how long are you going to play hard to get?"</span>`,
+                searchTerms: "hard to get consequences"
+            },
+            {
+                date: "December 24, 2025",
+                title: "The Declaration 💍",
+                type: "milestone",
+                content: `<span class="timeline-quote">"Since you never got to call me back yesterday I made it up in my mind that you're my girlfriend. That's just what that is."</span>`,
+                searchTerms: "girlfriend declaration official"
+            },
+            {
+                date: "December 24, 2025",
+                title: "Wetter x Dangerous 🎵",
+                type: "song",
+                content: "A mashup that captures the vibe.",
+                songs: [
+                    { title: "Dangerous x Wetter (Mashup)", artist: "Twista ft. Morgan Wallen", url: "https://youtu.be/3_zKBlZtsUg" }
+                ],
+                searchTerms: "twista morgan wallen dangerous wetter mashup"
+            },
+            {
+                date: "December 25, 2025",
+                title: "Christmas Day ❤️",
+                type: "milestone",
+                content: `<span class="timeline-quote">"What makes you special to me, is that you see me. Patrick, flaws and all. And even then you think I'm an incredibly attractive strapping young man. You're special because... you still not scared away of sharing an experience with me."</span>`,
+                searchTerms: "christmas special see me flaws"
+            },
+            {
+                date: "December 26, 2025",
+                title: "The L Word 💜",
+                type: "milestone",
+                content: `<span class="timeline-quote">"I don't like being mad. I already miss you... I meant everything I said yesterday."</span> First "I love you" energy.`,
+                searchTerms: "love miss meant everything"
+            },
+            {
+                date: "December 29, 2025",
+                title: "Philosophy Hour 🌌",
+                type: "text",
+                content: `You asked if I believe in soulmates. <span class="timeline-quote">"I believe that time doesn't exist... everything that has ever happened has already happened and you're just experiencing right now. I believe there's energy that vibrate at a similar vibration and always have and always will."</span>`,
+                searchTerms: "soulmates time energy vibration philosophy"
+            },
+            {
+                date: "January 1, 2026",
+                title: "New Year Together 🎆",
+                type: "milestone",
+                content: `<span class="timeline-quote">"Happy New Year!"</span> Our first.`,
+                searchTerms: "new year 2026 first"
+            },
+            {
+                date: "January 5, 2026",
+                title: "My Good Thing ✨",
+                type: "milestone",
+                content: `<span class="timeline-quote">"I miss you because you are my good thing, my muse, my inspiration to have more even if I don't want to dress like it. You are the reason and the motivation to get out of bed and the big reason I want to stay in it... I love you."</span>`,
+                searchTerms: "good thing muse inspiration love"
+            },
+            {
+                date: "January 6, 2026",
+                title: "Come In Here 🏠",
+                type: "milestone",
+                content: `<span class="timeline-quote">"Come in here."</span> You came to see me. First time at my place. New level unlocked.`,
+                searchTerms: "come in here visit place"
+            },
+            {
+                date: "January 9, 2026",
+                title: "Try Loving Me 🎵",
+                type: "song",
+                content: "Found a song that says exactly how I feel.",
+                songs: [
+                    { title: "Try Loving Me", artist: "Anthony Q.", url: "https://music.youtube.com/watch?v=hT3ACio5asw" }
+                ],
+                searchTerms: "try loving me anthony q"
+            },
+            {
+                date: "January 9, 2026",
+                title: "The Marathon 🔥",
+                type: "stat",
+                stat: { number: "24", label: "Calls in one day. We literally couldn't hang up." },
+                content: `The day we set the record. Back to back to back. <span class="timeline-quote">"Don make me blow up your phone like that again."</span>`,
+                searchTerms: "marathon calls 24 record phone"
+            },
+            {
+                date: "January 11, 2026",
+                title: "The Perception Check 📝",
+                type: "milestone",
+                content: `You asked what I know about you. I said: <span class="timeline-quote">"Light or heavy? You used to eat Reese's all the time but burned yourself out. You want flowers but not roses. Your spending habits used to be better, but you shop away lonely/pain. You won Miss America two times in a row. Am I missing anything?"</span> You said: "Punctuation!" 😂`,
+                searchTerms: "perception check know reeses flowers roses miss america"
+            },
+            {
+                date: "January 11, 2026",
+                title: "The Fact Check 👑",
+                type: "text",
+                content: `You tried to call yourself "the fattest." I corrected the record immediately: <span class="timeline-quote">"And most beautiful."</span>`,
+                searchTerms: "beautiful fattest fact check"
+            },
+            {
+                date: "January 12, 2026",
+                title: "The Real Talk 💯",
+                type: "text",
+                content: `<span class="timeline-quote">"Everything is not going to be perfect all the time. There will be times when you make me upset and also time when I make you upset. You cannot just dwell in that moment overthinking or beating yourself up about it."</span> Maturity. Growth.`,
+                searchTerms: "real talk perfect upset maturity growth"
+            },
+            {
+                date: "January 17, 2026",
+                title: "Room 724 🏨",
+                type: "milestone",
+                content: `Got us a room because it was freezing. <span class="timeline-quote">"I'm all about you. I love you seriously, totally, and undeniably. And I may be a lil tipsy but I will stand on my shit."</span>`,
+                searchTerms: "room 724 hotel love stand on"
+            },
+            {
+                date: "January 19, 2026",
+                title: "Rumpelstiltskin Found 🔍",
+                type: "text",
+                content: `<span class="timeline-quote">"Jamee Antionette Hampton aka Jamee Drew aka Rumpelstiltskin I got your ass 😘😘😘"</span> Finally found your full name.`,
+                searchTerms: "jamee antionette hampton rumpelstiltskin name"
+            },
+            {
+                date: "January 21, 2026",
+                title: "Vulnerable Hours 🌙",
+                type: "text",
+                content: `<span class="timeline-quote">"Letting you in on the sadder parts... I seriously be wanting to cry sometimes. I'm a G though, fuck that shit. And I'll talk the fuck love shit. You see how you got me wrapped around you. Even when you stand on business. I love you."</span>`,
+                searchTerms: "vulnerable cry wrapped around love"
+            },
+            {
+                date: "January 22, 2026",
+                title: "Never Doubt 💪",
+                type: "text",
+                content: `<span class="timeline-quote">"Never doubt that I love you. So much that I understand if you have to leave me alone. Not saying that is what is going on... it's just I understand. It's going to destroy me, but... Then there's you who doesn't fit in any category."</span>`,
+                searchTerms: "never doubt love understand destroy"
+            },
+            {
+                date: "January 27, 2026",
+                title: "Crisis Averted 🚗",
+                type: "text",
+                content: `I was sick at work, dizzy. You said go to the hospital. Taegen offered her couch. I said: <span class="timeline-quote">"No thank you the way my gf understanding is set up."</span> Ubered straight home. Priorities clear.`,
+                searchTerms: "crisis sick dizzy taegen couch gf understanding priorities"
+            },
+            {
+                date: "January 29, 2026",
+                title: "What You Mean To Me 💝",
+                type: "text",
+                content: "You asked: " + '"' + "You know what you mean to me?" + '"' + " I do. And you know what you mean to me.",
+                searchTerms: "mean to me"
+            },
+            {
+                date: "February 5, 2026",
+                title: "Darker Days Without You 🌑",
+                type: "text",
+                content: `<span class="timeline-quote">"I miss my girlfriend but I know she needs rest. You been going too hard baby. I love you."</span> And: <span class="timeline-quote">"Baby my days are darker without you for real."</span>`,
+                searchTerms: "darker days miss rest love"
+            },
+            {
+                date: "February 14, 2026",
+                title: "Valentine's Day 💕",
+                type: "milestone",
+                content: "Our first Valentine's Day. 102 days of calls, texts, songs, inside jokes, standing on business, and falling deeper. Happy Valentine's Day, Big Dog.",
+                searchTerms: "valentines day first 102 days"
+            }
+        ];
 
-if('serviceWorker'in navigator){
- navigator.serviceWorker.register('/sw.js').catch(()=>{});
-}
-</script>
+        const statsBase = { calls: 847, texts: 2400, gms: 98 };
+
+        function calculateDays() {
+            const startDate = new Date('2025-10-25');
+            const today = new Date();
+            const diffTime = Math.abs(today - startDate);
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        }
+
+        function splitFlipValue(value) {
+            const raw = String(value);
+            const midpoint = Math.ceil(raw.length / 2);
+            return {
+                top: raw.slice(0, midpoint),
+                bottom: raw.slice(midpoint)
+            };
+        }
+
+        function buildFlip(el, initialValue, ariaLabel) {
+            if (!el) return;
+            const parts = splitFlipValue(initialValue);
+            const safeTop = escapeHtml(parts.top);
+            const safeBottom = escapeHtml(parts.bottom);
+            el.innerHTML = `
+                <div class="flip-card" role="group" aria-label="${escapeHtml(ariaLabel)}">
+                    <div class="flip-static-top" data-part="staticTop">${safeTop}</div>
+                    <div class="flip-divider" aria-hidden="true"></div>
+                    <div class="flip-static-bottom" data-part="staticBottom">${safeBottom}</div>
+                    <div class="flip-anim-top" data-part="animTop">${safeTop}</div>
+                    <div class="flip-anim-bottom" data-part="animBottom">${safeBottom}</div>
+                </div>
+            `;
+        }
+
+        function setFlipValue(el, nextValue, animate) {
+            if (!el) return;
+            const card = el.querySelector('.flip-card');
+            if (!card) return;
+
+            const staticTop = card.querySelector('[data-part="staticTop"]');
+            const staticBottom = card.querySelector('[data-part="staticBottom"]');
+            const animTop = card.querySelector('[data-part="animTop"]');
+            const animBottom = card.querySelector('[data-part="animBottom"]');
+
+            const nextParts = splitFlipValue(nextValue);
+            const currentTop = staticTop.textContent;
+            const currentBottom = staticBottom.textContent;
+
+            if (currentTop === nextParts.top && currentBottom === nextParts.bottom) return;
+
+            if (!animate) {
+                staticTop.textContent = nextParts.top;
+                staticBottom.textContent = nextParts.bottom;
+                animTop.textContent = nextParts.top;
+                animBottom.textContent = nextParts.bottom;
+                return;
+            }
+
+            animTop.textContent = currentTop;
+            animBottom.textContent = nextParts.bottom;
+
+            animTop.style.display = 'flex';
+            animBottom.style.display = 'flex';
+
+            animTop.style.animation = 'none';
+            animBottom.style.animation = 'none';
+            void animTop.offsetWidth;
+
+            animTop.style.animation = 'flipDownTop 240ms ease-in forwards';
+            staticTop.textContent = nextParts.top;
+
+            setTimeout(() => {
+                animBottom.style.animation = 'flipUpBottom 260ms ease-out forwards';
+            }, 240);
+
+            setTimeout(() => {
+                staticBottom.textContent = nextParts.bottom;
+                animTop.style.display = 'none';
+                animBottom.style.display = 'none';
+                animTop.style.animation = 'none';
+                animBottom.style.animation = 'none';
+            }, 520);
+        }
+
+        function replayFlip(el) {
+            if (!el) return;
+            const card = el.querySelector('.flip-card');
+            if (!card) return;
+
+            const staticTop = card.querySelector('[data-part="staticTop"]');
+            const staticBottom = card.querySelector('[data-part="staticBottom"]');
+            const animTop = card.querySelector('[data-part="animTop"]');
+            const animBottom = card.querySelector('[data-part="animBottom"]');
+
+            const valueTop = staticTop.textContent;
+            const valueBottom = staticBottom.textContent;
+
+            animTop.textContent = valueTop;
+            animBottom.textContent = valueBottom;
+
+            animTop.style.display = 'flex';
+            animBottom.style.display = 'flex';
+
+            animTop.style.animation = 'none';
+            animBottom.style.animation = 'none';
+            void animTop.offsetWidth;
+
+            animTop.style.animation = 'flipDownTop 220ms ease-in forwards';
+
+            setTimeout(() => {
+                animBottom.style.animation = 'flipUpBottom 240ms ease-out forwards';
+            }, 220);
+
+            setTimeout(() => {
+                staticTop.textContent = valueTop;
+                staticBottom.textContent = valueBottom;
+                animTop.style.display = 'none';
+                animBottom.style.display = 'none';
+                animTop.style.animation = 'none';
+                animBottom.style.animation = 'none';
+            }, 480);
+        }
+
+        function replayAllFlips() {
+            const order = [
+                document.querySelector('[data-flip-id="days"]'),
+                document.querySelector('[data-flip-id="calls"]'),
+                document.querySelector('[data-flip-id="texts"]'),
+                document.querySelector('[data-flip-id="gms"]')
+            ].filter(Boolean);
+            order.forEach((el, i) => setTimeout(() => replayFlip(el), i * 120));
+        }
+
+        function updateStats(animate) {
+            const days = calculateDays();
+            setFlipValue(document.querySelector('[data-flip-id="days"]'), String(days), animate);
+            setFlipValue(document.querySelector('[data-flip-id="calls"]'), formatCompact(statsBase.calls), animate);
+            setFlipValue(document.querySelector('[data-flip-id="texts"]'), formatCompact(statsBase.texts), animate);
+            setFlipValue(document.querySelector('[data-flip-id="gms"]'), formatCompact(statsBase.gms), animate);
+        }
+
+        function formatCompact(n) {
+            const num = Number(n);
+            if (!Number.isFinite(num)) return String(n);
+            if (num >= 1000000) return (num/1000000).toFixed(1).replace(/\.0$/,'') + 'M';
+            if (num >= 1000) return (num/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+            return String(num);
+        }
+
+        function escapeHtml(s) {
+            return String(s)
+                .replaceAll('&','&amp;')
+                .replaceAll('<','&lt;')
+                .replaceAll('>','&gt;')
+                .replaceAll('"','&quot;')
+                .replaceAll("'","&#39;");
+        }
+
+        // Render timeline
+        function renderTimeline(data) {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'timeline-item';
+                itemEl.dataset.type = item.type;
+                itemEl.style.transitionDelay = `${index * 50}ms`;
+
+                let contentHTML = `
+                    <div class="timeline-dot"></div>
+                    <p class="timeline-date">${item.date}</p>
+                    <h3 class="timeline-title">${item.title}</h3>
+                    <div class="timeline-content">${item.content}</div>
+                `;
+
+                // Add stat highlight if applicable
+                if (item.stat) {
+                    contentHTML += `
+                        <div class="stat-highlight">
+                            <p class="stat-number">${item.stat.number}</p>
+                            <p class="stat-label">${item.stat.label}</p>
+                        </div>
+                    `;
+                }
+
+                // Add song cards if applicable
+                if (item.songs) {
+                    item.songs.forEach(song => {
+                        contentHTML += `
+                            <div class="song-card" data-url="${song.url}" data-title="${song.title}" data-artist="${song.artist}">
+                                <div class="song-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                                    </svg>
+                                </div>
+                                <div class="song-info">
+                                    <p class="song-title">${song.title}</p>
+                                    <p class="song-artist">${song.artist}</p>
+                                </div>
+                                <div class="play-btn">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                itemEl.innerHTML = contentHTML;
+                timeline.appendChild(itemEl);
+            });
+
+            // Re-attach song card listeners
+            attachSongListeners();
+            
+            // Observe items for animation
+            observeItems();
+        }
+
+        // Intersection Observer for animations
+        function observeItems() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // Song cards open links
+        function attachSongListeners() {
+            document.querySelectorAll('.song-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const url = card.dataset.url;
+                    window.open(url, '_blank');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTimeline(timelineData);
+
+            buildFlip(document.querySelector('[data-flip-id="days"]'), '—', 'Days since Oct 25, 2025');
+            buildFlip(document.querySelector('[data-flip-id="calls"]'), formatCompact(statsBase.calls), 'Calls count');
+            buildFlip(document.querySelector('[data-flip-id="texts"]'), formatCompact(statsBase.texts), 'Texts count');
+            buildFlip(document.querySelector('[data-flip-id="gms"]'), formatCompact(statsBase.gms), 'Good mornings count');
+
+            updateStats(false);
+            setTimeout(replayAllFlips, 160);
+        });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => {
+                console.log('SW registration failed:', err);
+            });
+        }
+    </script>
 </body>
 </html>
