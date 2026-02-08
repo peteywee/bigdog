@@ -6,6 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1a1410">
+    <meta name="description" content="Big Dog's App - A Love Story in Receipts. Tracking our journey since October 25, 2025.">
     <title>Big Dog's App</title>
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -1018,6 +1019,7 @@
         ];
 
         const statsBase = { calls: 847, texts: 2400, gms: 98 };
+        const FLIP_ANIMATION_DURATION = 650; // Animation duration in ms (300ms down + 300ms up + buffer)
 
         function calculateDays() {
             const startDate = new Date('2025-10-25');
@@ -1090,7 +1092,7 @@
                             void nt.offsetWidth;
                             nt.style.animation = '';
                             nb.style.animation = '';
-                        }, 650);
+                        }, FLIP_ANIMATION_DURATION);
                     } else {
                         topNum.textContent = safe;
                         digit.querySelector('.bottom .num').textContent = safe;
@@ -1115,7 +1117,7 @@
                     void nt.offsetWidth;
                     nt.style.animation = '';
                     nb.style.animation = '';
-                }, 650);
+                }, FLIP_ANIMATION_DURATION);
             });
         }
 
@@ -1186,7 +1188,7 @@
                 if (item.songs) {
                     item.songs.forEach(song => {
                         contentHTML += `
-                            <div class="song-card" data-url="${song.url}" data-title="${song.title}" data-artist="${song.artist}">
+                            <div class="song-card" data-url="${song.url}" data-title="${song.title}" data-artist="${song.artist}" role="button" tabindex="0" aria-label="Play ${song.title} by ${song.artist}">
                                 <div class="song-icon">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
