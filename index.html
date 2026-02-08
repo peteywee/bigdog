@@ -166,16 +166,17 @@
             position: relative;
             width: 150px;
             height: 60px;
-            perspective: 900px;
+            perspective: 200px;
             flex-shrink: 0;
         }
 
         .flip.small { width: 120px; height: 52px; }
         .flip.big { width: 170px; height: 68px; }
 
-        .flip-card {
+        .flip-unit-container {
             position: absolute;
             inset: 0;
+            perspective: inherit;
             border-radius: 14px;
             border: 1px solid rgba(255,255,255,0.08);
             overflow: hidden;
@@ -183,73 +184,75 @@
             box-shadow: 0 8px 18px rgba(0,0,0,0.25);
         }
 
-        .flip-divider {
-            position: absolute;
-            left: 10px; right: 10px;
-            top: 50%;
-            height: 1px;
-            background: rgba(255,255,255,0.08);
-            transform: translateY(-0.5px);
-            z-index: 5;
-        }
-
-        .flip-static-top, .flip-static-bottom,
-        .flip-anim-top, .flip-anim-bottom {
-            position: absolute;
-            left: 0; right: 0;
+        .top-half, .bottom-half, .flip-card-top, .flip-card-bottom {
             height: 50%;
+            overflow: hidden;
+            background: var(--dark-warm);
+            color: var(--gold-light);
+            position: absolute;
+            width: 100%;
+            text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Playfair Display', serif;
             font-weight: 700;
-            color: var(--gold-light);
             letter-spacing: 0.02em;
             text-shadow: 0 2px 12px rgba(0,0,0,0.45);
-            user-select: none;
             backface-visibility: hidden;
-            transform-style: preserve-3d;
         }
 
-        .flip.big .flip-static-top, .flip.big .flip-static-bottom,
-        .flip.big .flip-anim-top, .flip.big .flip-anim-bottom { font-size: 2.1rem; }
-        .flip.small .flip-static-top, .flip.small .flip-static-bottom,
-        .flip.small .flip-anim-top, .flip.small .flip-anim-bottom { font-size: 1.45rem; }
+        .flip.big .top-half, .flip.big .bottom-half,
+        .flip.big .flip-card-top, .flip.big .flip-card-bottom { font-size: 2.1rem; }
+        .flip.small .top-half, .flip.small .bottom-half,
+        .flip.small .flip-card-top, .flip.small .flip-card-bottom { font-size: 1.45rem; }
 
-        .flip-static-top {
-            top: 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.10));
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            transform: translateZ(1px);
-        }
-
-        .flip-static-bottom {
-            bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(255,255,255,0.03));
-            transform: translateZ(1px);
-        }
-
-        .flip-anim-top {
+        .top-half, .flip-card-top {
             top: 0;
             transform-origin: bottom;
             background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.10));
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            display: none;
-            transform: rotateX(0deg);
-            z-index: 10;
         }
 
-        .flip-anim-bottom {
+        .bottom-half, .flip-card-bottom {
             bottom: 0;
-            transform-origin: top;
+            align-items: flex-end;
             background: linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(255,255,255,0.03));
-            display: none;
-            transform: rotateX(90deg);
-            z-index: 10;
+            transform-origin: top;
         }
 
-        @keyframes flipDownTop { from { transform: rotateX(0deg); } to { transform: rotateX(-90deg); } }
-        @keyframes flipUpBottom { from { transform: rotateX(90deg); } to { transform: rotateX(0deg); } }
+        .flip-card {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .flip-card-top {
+            transform: rotateX(0deg);
+            z-index: 2;
+        }
+
+        .flip-card-bottom {
+            transform: rotateX(90deg);
+            z-index: 1;
+        }
+
+        @keyframes flip-top {
+            from { transform: rotateX(0deg); }
+            to { transform: rotateX(-90deg); }
+        }
+
+        @keyframes flip-bottom {
+            from { transform: rotateX(90deg); }
+            to { transform: rotateX(0deg); }
+        }
+
+        .flip-unit-container.animate .flip-card-top {
+            animation: flip-top 0.5s ease-in forwards;
+        }
+
+        .flip-unit-container.animate .flip-card-bottom {
+            animation: flip-bottom 0.5s ease-out 0.5s forwards;
+        }
 
         .scroll-indicator {
             position: absolute;
@@ -1019,103 +1022,86 @@
             const safeTop = escapeHtml(parts.top);
             const safeBottom = escapeHtml(parts.bottom);
             el.innerHTML = `
-                <div class="flip-card" role="group" aria-label="${escapeHtml(ariaLabel)}">
-                    <div class="flip-static-top" data-part="staticTop">${safeTop}</div>
-                    <div class="flip-divider" aria-hidden="true"></div>
-                    <div class="flip-static-bottom" data-part="staticBottom">${safeBottom}</div>
-                    <div class="flip-anim-top" data-part="animTop">${safeTop}</div>
-                    <div class="flip-anim-bottom" data-part="animBottom">${safeBottom}</div>
+                <div class="flip-unit-container" role="group" aria-label="${escapeHtml(ariaLabel)}">
+                    <div class="top-half" data-part="topCurrent">${safeTop}</div>
+                    <div class="bottom-half" data-part="bottomCurrent">${safeBottom}</div>
+                    <div class="flip-card">
+                        <div class="flip-card-top" data-part="animTop">${safeTop}</div>
+                        <div class="flip-card-bottom" data-part="animBottom">${safeBottom}</div>
+                    </div>
                 </div>
             `;
         }
 
         function setFlipValue(el, nextValue, animate) {
             if (!el) return;
-            const card = el.querySelector('.flip-card');
-            if (!card) return;
+            const unit = el.querySelector('.flip-unit-container');
+            if (!unit) return;
 
-            const staticTop = card.querySelector('[data-part="staticTop"]');
-            const staticBottom = card.querySelector('[data-part="staticBottom"]');
-            const animTop = card.querySelector('[data-part="animTop"]');
-            const animBottom = card.querySelector('[data-part="animBottom"]');
+            const topHalf = unit.querySelector('[data-part="topCurrent"]');
+            const bottomHalf = unit.querySelector('[data-part="bottomCurrent"]');
+            const animTop = unit.querySelector('[data-part="animTop"]');
+            const animBottom = unit.querySelector('[data-part="animBottom"]');
 
             const nextParts = splitFlipValue(nextValue);
-            const currentTop = staticTop.textContent;
-            const currentBottom = staticBottom.textContent;
+            const currentTop = topHalf.textContent;
+            const currentBottom = bottomHalf.textContent;
 
             if (currentTop === nextParts.top && currentBottom === nextParts.bottom) return;
 
             if (!animate) {
-                staticTop.textContent = nextParts.top;
-                staticBottom.textContent = nextParts.bottom;
+                topHalf.textContent = nextParts.top;
+                bottomHalf.textContent = nextParts.bottom;
                 animTop.textContent = nextParts.top;
                 animBottom.textContent = nextParts.bottom;
+                unit.classList.remove('animate');
                 return;
             }
 
             animTop.textContent = currentTop;
             animBottom.textContent = nextParts.bottom;
 
-            animTop.style.display = 'flex';
-            animBottom.style.display = 'flex';
-
-            animTop.style.animation = 'none';
-            animBottom.style.animation = 'none';
-            void animTop.offsetWidth;
-
-            animTop.style.animation = 'flipDownTop 240ms ease-in forwards';
-            staticTop.textContent = nextParts.top;
+            unit.classList.remove('animate');
+            void unit.offsetWidth;
+            unit.classList.add('animate');
 
             setTimeout(() => {
-                animBottom.style.animation = 'flipUpBottom 260ms ease-out forwards';
-            }, 240);
+                topHalf.textContent = nextParts.top;
+                animTop.textContent = nextParts.top;
+            }, 500);
 
             setTimeout(() => {
-                staticBottom.textContent = nextParts.bottom;
-                animTop.style.display = 'none';
-                animBottom.style.display = 'none';
-                animTop.style.animation = 'none';
-                animBottom.style.animation = 'none';
-            }, 520);
+                bottomHalf.textContent = nextParts.bottom;
+                animBottom.textContent = nextParts.bottom;
+                unit.classList.remove('animate');
+            }, 1000);
         }
 
         function replayFlip(el) {
             if (!el) return;
-            const card = el.querySelector('.flip-card');
-            if (!card) return;
+            const unit = el.querySelector('.flip-unit-container');
+            if (!unit) return;
 
-            const staticTop = card.querySelector('[data-part="staticTop"]');
-            const staticBottom = card.querySelector('[data-part="staticBottom"]');
-            const animTop = card.querySelector('[data-part="animTop"]');
-            const animBottom = card.querySelector('[data-part="animBottom"]');
+            const topHalf = unit.querySelector('[data-part="topCurrent"]');
+            const bottomHalf = unit.querySelector('[data-part="bottomCurrent"]');
+            const animTop = unit.querySelector('[data-part="animTop"]');
+            const animBottom = unit.querySelector('[data-part="animBottom"]');
 
-            const valueTop = staticTop.textContent;
-            const valueBottom = staticBottom.textContent;
+            const valueTop = topHalf.textContent;
+            const valueBottom = bottomHalf.textContent;
 
             animTop.textContent = valueTop;
             animBottom.textContent = valueBottom;
 
-            animTop.style.display = 'flex';
-            animBottom.style.display = 'flex';
-
-            animTop.style.animation = 'none';
-            animBottom.style.animation = 'none';
-            void animTop.offsetWidth;
-
-            animTop.style.animation = 'flipDownTop 220ms ease-in forwards';
+            unit.classList.remove('animate');
+            void unit.offsetWidth;
+            unit.classList.add('animate');
 
             setTimeout(() => {
-                animBottom.style.animation = 'flipUpBottom 240ms ease-out forwards';
-            }, 220);
-
-            setTimeout(() => {
-                staticTop.textContent = valueTop;
-                staticBottom.textContent = valueBottom;
-                animTop.style.display = 'none';
-                animBottom.style.display = 'none';
-                animTop.style.animation = 'none';
-                animBottom.style.animation = 'none';
-            }, 480);
+                animTop.textContent = valueTop;
+                animBottom.textContent = valueBottom;
+                unit.classList.remove('animate');
+            }, 1000);
         }
 
         function replayAllFlips() {
