@@ -163,95 +163,114 @@
         }
 
         .flip {
-            position: relative;
-            width: 150px;
-            height: 60px;
-            perspective: 200px;
+            display: flex;
+            gap: 2px;
             flex-shrink: 0;
         }
 
-        .flip.small { width: 120px; height: 52px; }
-        .flip.big { width: 170px; height: 68px; }
-
-        .flip-unit-container {
-            position: absolute;
-            inset: 0;
-            perspective: inherit;
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
-            background: rgba(0,0,0,0.2);
-            box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+        /* Each character gets its own flip-digit box */
+        .flip-digit {
+            position: relative;
+            display: inline-block;
+            width: 28px;
+            height: 52px;
+            perspective: 400px;
+            transform-style: preserve-3d;
         }
 
-        .top-half, .bottom-half, .flip-card-top, .flip-card-bottom {
+        .flip.big .flip-digit { width: 32px; height: 60px; }
+
+        /* Punctuation chars (., K, M) are narrower */
+        .flip-digit.narrow { width: 18px; }
+
+        .flip-digit .top,
+        .flip-digit .bottom,
+        .flip-digit .next-top,
+        .flip-digit .next-bottom {
+            position: absolute;
+            left: 0;
+            width: 100%;
             height: 50%;
             overflow: hidden;
-            background: var(--dark-warm);
-            color: var(--gold-light);
+            backface-visibility: hidden;
+            transform: translateZ(0);
+            will-change: transform;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .flip-digit .top,
+        .flip-digit .next-top {
+            top: 0;
+            background: linear-gradient(to bottom, #3a2e25, #2d221c);
+            border-radius: 6px 6px 0 0;
+            border-bottom: 1px solid rgba(0,0,0,0.4);
+        }
+
+        .flip-digit .bottom,
+        .flip-digit .next-bottom {
+            top: 50%;
+            background: linear-gradient(to bottom, #2d221c, #241c16);
+            border-radius: 0 0 6px 6px;
+        }
+
+        /* The inner number spans — 200% height "cut" technique */
+        .flip-digit .top .num,
+        .flip-digit .next-top .num {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            text-align: center;
+            height: 200%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Playfair Display', serif;
             font-weight: 700;
-            letter-spacing: 0.02em;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.45);
-            backface-visibility: hidden;
+            color: var(--gold-light);
+            text-shadow: 0 1px 6px rgba(0,0,0,0.5);
         }
 
-        .flip.big .top-half, .flip.big .bottom-half,
-        .flip.big .flip-card-top, .flip.big .flip-card-bottom { font-size: 2.1rem; }
-        .flip.small .top-half, .flip.small .bottom-half,
-        .flip.small .flip-card-top, .flip.small .flip-card-bottom { font-size: 1.45rem; }
-
-        .top-half, .flip-card-top {
-            top: 0;
-            transform-origin: bottom;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.05), rgba(0,0,0,0.10));
-        }
-
-        .bottom-half, .flip-card-bottom {
-            bottom: 0;
-            align-items: flex-end;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.12), rgba(255,255,255,0.03));
-            transform-origin: top;
-        }
-
-        .flip-card {
+        .flip-digit .bottom .num,
+        .flip-digit .next-bottom .num {
             position: absolute;
-            inset: 0;
-            pointer-events: none;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 200%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--gold-light);
+            text-shadow: 0 1px 6px rgba(0,0,0,0.5);
         }
 
-        .flip-card-top {
-            transform: rotateX(0deg);
-            z-index: 2;
+        .flip.big .flip-digit .num { font-size: 2rem; }
+        .flip .flip-digit .num { font-size: 1.4rem; }
+
+        /* Static halves sit behind; animated halves sit in front */
+        .flip-digit .top { z-index: 1; }
+        .flip-digit .bottom { z-index: 1; }
+        .flip-digit .next-top { z-index: 3; transform-origin: bottom; }
+        .flip-digit .next-bottom { z-index: 2; transform-origin: top; transform: rotateX(90deg); }
+
+        @keyframes flip-top-down {
+            0% { transform: rotateX(0deg); z-index: 3; }
+            100% { transform: rotateX(-90deg); z-index: 3; }
         }
 
-        .flip-card-bottom {
-            transform: rotateX(90deg);
-            z-index: 1;
+        @keyframes flip-bottom-up {
+            0% { transform: rotateX(90deg); z-index: 2; }
+            100% { transform: rotateX(0deg); z-index: 2; }
         }
 
-        @keyframes flip-top {
-            from { transform: rotateX(0deg); }
-            to { transform: rotateX(-90deg); }
+        .flip-digit.flipping .next-top {
+            animation: flip-top-down 0.3s ease-in forwards;
         }
 
-        @keyframes flip-bottom {
-            from { transform: rotateX(90deg); }
-            to { transform: rotateX(0deg); }
-        }
-
-        .flip-unit-container.animate .flip-card-top {
-            animation: flip-top 0.5s ease-in forwards;
-        }
-
-        .flip-unit-container.animate .flip-card-bottom {
-            animation: flip-bottom 0.5s ease-out 0.5s forwards;
+        .flip-digit.flipping .next-bottom {
+            animation: flip-bottom-up 0.3s ease-out 0.3s forwards;
         }
 
         .scroll-indicator {
@@ -1007,101 +1026,97 @@
             return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         }
 
-        function splitFlipValue(value) {
-            const raw = String(value);
-            const midpoint = Math.ceil(raw.length / 2);
-            return {
-                top: raw.slice(0, midpoint),
-                bottom: raw.slice(midpoint)
-            };
+        function buildFlip(container, value) {
+            if (!container) return;
+            container.innerHTML = '';
+            const chars = String(value).split('');
+
+            chars.forEach(ch => {
+                const g = document.createElement('div');
+                g.className = 'flip-digit';
+                if (/[.KMk]/.test(ch)) g.classList.add('narrow');
+
+                const safe = escapeHtml(ch);
+                g.innerHTML = `
+                    <div class="top"><span class="num">${safe}</span></div>
+                    <div class="bottom"><span class="num">${safe}</span></div>
+                    <div class="next-top"><span class="num">${safe}</span></div>
+                    <div class="next-bottom"><span class="num">${safe}</span></div>
+                `;
+                container.appendChild(g);
+            });
         }
 
-        function buildFlip(el, initialValue, ariaLabel) {
-            if (!el) return;
-            const parts = splitFlipValue(initialValue);
-            const safeTop = escapeHtml(parts.top);
-            const safeBottom = escapeHtml(parts.bottom);
-            el.innerHTML = `
-                <div class="flip-unit-container" role="group" aria-label="${escapeHtml(ariaLabel)}">
-                    <div class="top-half" data-part="topCurrent">${safeTop}</div>
-                    <div class="bottom-half" data-part="bottomCurrent">${safeBottom}</div>
-                    <div class="flip-card">
-                        <div class="flip-card-top" data-part="animTop">${safeTop}</div>
-                        <div class="flip-card-bottom" data-part="animBottom">${safeBottom}</div>
-                    </div>
-                </div>
-            `;
-        }
+        function setFlipValue(container, newValue, animate) {
+            if (!container) return;
+            const newChars = String(newValue).split('');
+            const flippers = container.querySelectorAll('.flip-digit');
 
-        function setFlipValue(el, nextValue, animate) {
-            if (!el) return;
-            const unit = el.querySelector('.flip-unit-container');
-            if (!unit) return;
-
-            const topHalf = unit.querySelector('[data-part="topCurrent"]');
-            const bottomHalf = unit.querySelector('[data-part="bottomCurrent"]');
-            const animTop = unit.querySelector('[data-part="animTop"]');
-            const animBottom = unit.querySelector('[data-part="animBottom"]');
-
-            const nextParts = splitFlipValue(nextValue);
-            const currentTop = topHalf.textContent;
-            const currentBottom = bottomHalf.textContent;
-
-            if (currentTop === nextParts.top && currentBottom === nextParts.bottom) return;
-
-            if (!animate) {
-                topHalf.textContent = nextParts.top;
-                bottomHalf.textContent = nextParts.bottom;
-                animTop.textContent = nextParts.top;
-                animBottom.textContent = nextParts.bottom;
-                unit.classList.remove('animate');
+            // If character count changed, rebuild from scratch
+            if (newChars.length !== flippers.length) {
+                buildFlip(container, newValue);
                 return;
             }
 
-            animTop.textContent = currentTop;
-            animBottom.textContent = nextParts.bottom;
+            newChars.forEach((ch, i) => {
+                const digit = flippers[i];
+                if (!digit) return;
 
-            unit.classList.remove('animate');
-            void unit.offsetWidth;
-            unit.classList.add('animate');
+                const topNum = digit.querySelector('.top .num');
+                const currentVal = topNum.textContent;
 
-            setTimeout(() => {
-                topHalf.textContent = nextParts.top;
-                animTop.textContent = nextParts.top;
-            }, 500);
+                if (currentVal !== ch) {
+                    const safe = escapeHtml(ch);
+                    // Set the "next" values (hidden behind animation)
+                    digit.querySelector('.next-top .num').textContent = safe;
+                    digit.querySelector('.next-bottom .num').textContent = safe;
 
-            setTimeout(() => {
-                bottomHalf.textContent = nextParts.bottom;
-                animBottom.textContent = nextParts.bottom;
-                unit.classList.remove('animate');
-            }, 1000);
+                    if (animate) {
+                        // Force reflow then trigger animation
+                        digit.classList.remove('flipping');
+                        void digit.offsetWidth;
+                        digit.classList.add('flipping');
+
+                        // After animation completes, copy new value to static halves
+                        setTimeout(() => {
+                            topNum.textContent = safe;
+                            digit.querySelector('.bottom .num').textContent = safe;
+                            digit.classList.remove('flipping');
+                            // Reset next-top/next-bottom transforms
+                            const nt = digit.querySelector('.next-top');
+                            const nb = digit.querySelector('.next-bottom');
+                            nt.style.animation = 'none';
+                            nb.style.animation = 'none';
+                            void nt.offsetWidth;
+                            nt.style.animation = '';
+                            nb.style.animation = '';
+                        }, 650);
+                    } else {
+                        topNum.textContent = safe;
+                        digit.querySelector('.bottom .num').textContent = safe;
+                    }
+                }
+            });
         }
 
         function replayFlip(el) {
             if (!el) return;
-            const unit = el.querySelector('.flip-unit-container');
-            if (!unit) return;
-
-            const topHalf = unit.querySelector('[data-part="topCurrent"]');
-            const bottomHalf = unit.querySelector('[data-part="bottomCurrent"]');
-            const animTop = unit.querySelector('[data-part="animTop"]');
-            const animBottom = unit.querySelector('[data-part="animBottom"]');
-
-            const valueTop = topHalf.textContent;
-            const valueBottom = bottomHalf.textContent;
-
-            animTop.textContent = valueTop;
-            animBottom.textContent = valueBottom;
-
-            unit.classList.remove('animate');
-            void unit.offsetWidth;
-            unit.classList.add('animate');
-
-            setTimeout(() => {
-                animTop.textContent = valueTop;
-                animBottom.textContent = valueBottom;
-                unit.classList.remove('animate');
-            }, 1000);
+            const flippers = el.querySelectorAll('.flip-digit');
+            flippers.forEach(digit => {
+                digit.classList.remove('flipping');
+                void digit.offsetWidth;
+                digit.classList.add('flipping');
+                setTimeout(() => {
+                    digit.classList.remove('flipping');
+                    const nt = digit.querySelector('.next-top');
+                    const nb = digit.querySelector('.next-bottom');
+                    nt.style.animation = 'none';
+                    nb.style.animation = 'none';
+                    void nt.offsetWidth;
+                    nt.style.animation = '';
+                    nb.style.animation = '';
+                }, 650);
+            });
         }
 
         function replayAllFlips() {
@@ -1111,7 +1126,7 @@
                 document.querySelector('[data-flip-id="texts"]'),
                 document.querySelector('[data-flip-id="gms"]')
             ].filter(Boolean);
-            order.forEach((el, i) => setTimeout(() => replayFlip(el), i * 120));
+            order.forEach((el, i) => setTimeout(() => replayFlip(el), i * 200));
         }
 
         function updateStats(animate) {
@@ -1230,13 +1245,21 @@
         document.addEventListener('DOMContentLoaded', () => {
             renderTimeline(timelineData);
 
-            buildFlip(document.querySelector('[data-flip-id="days"]'), '—', 'Days since Oct 25, 2025');
-            buildFlip(document.querySelector('[data-flip-id="calls"]'), formatCompact(statsBase.calls), 'Calls count');
-            buildFlip(document.querySelector('[data-flip-id="texts"]'), formatCompact(statsBase.texts), 'Texts count');
-            buildFlip(document.querySelector('[data-flip-id="gms"]'), formatCompact(statsBase.gms), 'Good mornings count');
+            buildFlip(document.querySelector('[data-flip-id="days"]'), '—');
+            buildFlip(document.querySelector('[data-flip-id="calls"]'), formatCompact(statsBase.calls));
+            buildFlip(document.querySelector('[data-flip-id="texts"]'), formatCompact(statsBase.texts));
+            buildFlip(document.querySelector('[data-flip-id="gms"]'), formatCompact(statsBase.gms));
 
             updateStats(false);
             setTimeout(replayAllFlips, 160);
+
+            // Auto-refresh stats every 3s with small random bumps
+            setInterval(() => {
+                statsBase.calls += Math.floor(Math.random() * 5);
+                statsBase.texts += Math.floor(Math.random() * 12);
+                statsBase.gms += Math.random() < 0.1 ? 1 : 0;
+                updateStats(true);
+            }, 3000);
         });
 
         if ('serviceWorker' in navigator) {
